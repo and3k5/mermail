@@ -30,9 +30,11 @@
         {
             this.HostNameBox = new System.Windows.Forms.TextBox();
             this.PortBox = new System.Windows.Forms.TextBox();
-            this.SslBox = new System.Windows.Forms.TextBox();
             this.UserBox = new System.Windows.Forms.TextBox();
             this.PassBox = new System.Windows.Forms.TextBox();
+            this.mailBox = new System.Windows.Forms.ListBox();
+            this.useSslCheckbox = new System.Windows.Forms.CheckBox();
+            this.loginBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // HostNameBox
@@ -51,14 +53,6 @@
             this.PortBox.TabIndex = 1;
             this.PortBox.Text = "Port";
             // 
-            // SslBox
-            // 
-            this.SslBox.Location = new System.Drawing.Point(224, 12);
-            this.SslBox.Name = "SslBox";
-            this.SslBox.Size = new System.Drawing.Size(100, 20);
-            this.SslBox.TabIndex = 2;
-            this.SslBox.Text = "SSL?";
-            // 
             // UserBox
             // 
             this.UserBox.Location = new System.Drawing.Point(330, 12);
@@ -76,14 +70,44 @@
             this.PassBox.TabIndex = 4;
             this.PassBox.Text = "Password";
             // 
+            // mailBox
+            // 
+            this.mailBox.FormattingEnabled = true;
+            this.mailBox.Location = new System.Drawing.Point(12, 38);
+            this.mailBox.Name = "mailBox";
+            this.mailBox.Size = new System.Drawing.Size(237, 186);
+            this.mailBox.TabIndex = 5;
+            // 
+            // useSslCheckbox
+            // 
+            this.useSslCheckbox.AutoSize = true;
+            this.useSslCheckbox.Location = new System.Drawing.Point(225, 14);
+            this.useSslCheckbox.Name = "useSslCheckbox";
+            this.useSslCheckbox.Size = new System.Drawing.Size(68, 17);
+            this.useSslCheckbox.TabIndex = 6;
+            this.useSslCheckbox.Text = "Use SSL";
+            this.useSslCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // loginBtn
+            // 
+            this.loginBtn.Location = new System.Drawing.Point(542, 12);
+            this.loginBtn.Name = "loginBtn";
+            this.loginBtn.Size = new System.Drawing.Size(89, 19);
+            this.loginBtn.TabIndex = 7;
+            this.loginBtn.Text = "Log in";
+            this.loginBtn.UseVisualStyleBackColor = true;
+            this.loginBtn.Click += new System.EventHandler(this.loginBtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(684, 530);
+            this.Controls.Add(this.loginBtn);
+            this.Controls.Add(this.useSslCheckbox);
+            this.Controls.Add(this.mailBox);
             this.Controls.Add(this.PassBox);
             this.Controls.Add(this.UserBox);
-            this.Controls.Add(this.SslBox);
             this.Controls.Add(this.PortBox);
             this.Controls.Add(this.HostNameBox);
             this.Name = "Form1";
@@ -97,9 +121,11 @@
 
         private System.Windows.Forms.TextBox HostNameBox;
         private System.Windows.Forms.TextBox PortBox;
-        private System.Windows.Forms.TextBox SslBox;
         private System.Windows.Forms.TextBox UserBox;
         private System.Windows.Forms.TextBox PassBox;
+        private System.Windows.Forms.ListBox mailBox;
+        private System.Windows.Forms.CheckBox useSslCheckbox;
+        private System.Windows.Forms.Button loginBtn;
     }
 }
 

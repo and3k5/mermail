@@ -17,5 +17,22 @@ namespace MerMail
             InitializeComponent();
         }
 
+        private void loginBtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                mailBox.Items.Clear();
+                List<OpenPop.Mime.Message> result = MerMail.Program.FetchAllMessages(HostNameBox.Text, Convert.ToInt32(PortBox.Text), useSslCheckbox.Checked, UserBox.Text, PassBox.Text);
+                //mailBox.Items.
+                foreach (OpenPop.Mime.Message mail in result) {
+                    mailBox.Items.Add(mail.Headers.Subject);
+                }
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show("Der skete en fejl..." + err.Message);
+            }
+        }
+
     }
 }
