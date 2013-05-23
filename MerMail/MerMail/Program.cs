@@ -21,6 +21,31 @@ namespace MerMail
             //Application.Run(new ); //later
             Application.Run(new Form1());
         }
+        public readonly static string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        public static void initMermailDB()
+        {
+            if (System.IO.Directory.Exists(appdata+"/mermail/") == false)
+            {
+                System.IO.Directory.CreateDirectory(appdata+"/mermail/");
+            }
+            SQLiteConnectionStringBuilder conStr = new SQLiteConnectionStringBuilder();
+            conStr.DataSource = appdata+"/mermail/mermail.db";
+            conStr.Version = 3;
+
+            SQLiteConnection sqlCon = new SQLiteConnection(conStr.ConnectionString);
+
+            sqlCon.Open();
+
+            SQLiteCommand cmd = sqlCon.CreateCommand();
+            cmd.CommandText = "CREATE TABLE IF NOT EXISTS users ( id INTEGER PRIMARY KEY AUTOINCREMENT, mailaddress VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, pop_hostname VARCHAR(255) not null, pop_port INTEGER not null, pop_ssl BOOLEAN not null )";
+            cmd.ExecuteNonQuery();
+            sqlCon.Close();
+            //con.CreateFile("%appdata%/.mermail/mermail.db");
+
+
+
+
+        }
         public static List<OpenPop.Mime.Message> FetchAllMessages(string Hostname, int port, bool usessl, string username, string password)
         {
             using(OpenPop.Pop3.Pop3Client client = new OpenPop.Pop3.Pop3Client())

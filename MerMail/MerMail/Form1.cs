@@ -34,5 +34,10 @@ namespace MerMail
             }
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MerMail.Program.initMermailDB(); // skal køres ved startup istedet (måske)
+        }
+
     }
 }
