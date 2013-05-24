@@ -26,13 +26,12 @@ namespace MerMail
         {
             try
             {
-
+                MerMail.Program.AuthenticateLog(HostNameBox.Text, Convert.ToInt32(PortBox.Text), useSslCheckbox.Checked, UserBox.Text, PassBox.Text);
             }
             catch (Exception err)
             {
                 MessageBox.Show("Der skete en fejl..." + err.Message);
             }
         }
-
     }
 }

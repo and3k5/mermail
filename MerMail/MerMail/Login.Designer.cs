@@ -48,6 +48,7 @@
             this.loginBtn.TabIndex = 10;
             this.loginBtn.Text = "Log in";
             this.loginBtn.UseVisualStyleBackColor = true;
+            this.loginBtn.Click += new System.EventHandler(this.loginBtn_Click);
             // 
             // PassBox
             // 

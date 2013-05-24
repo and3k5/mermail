@@ -68,5 +68,31 @@ namespace MerMail
                 return allMessages;
             }
         }
+        public static void AuthenticateLog(string Hostname, int port, bool usessl, string username, string password) 
+        {
+            try
+            {
+                OpenPop.Pop3.Pop3Client authclient = new OpenPop.Pop3.Pop3Client();
+
+                authclient.Connect(Hostname, port, usessl);
+
+                authclient.Authenticate(username, password);
+
+                MessageBox.Show("con:"+authclient.Connected);
+                
+                if (authclient.Connected.Equals(true))
+                {
+                    Application.Run(new Form1());
+                }
+                else
+                {
+                    MessageBox.Show("Authentication failed");
+                }
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show("Der skete en fejl..."+err);
+            }
+        }
     }
 }
