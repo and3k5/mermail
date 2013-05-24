@@ -16,5 +16,23 @@ namespace MerMail
         {
             InitializeComponent();
         }
+
+        private void Login_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void loginBtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show("Der skete en fejl..." + err.Message);
+            }
+        }
+
     }
 }
