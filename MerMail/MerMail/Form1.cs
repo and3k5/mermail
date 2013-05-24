@@ -15,7 +15,6 @@ namespace MerMail
         public Form1()
         {
             InitializeComponent();
-            //fisk i en tynde
         }
 
         private void loginBtn_Click(object sender, EventArgs e)
