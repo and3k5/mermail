@@ -20,7 +20,16 @@ namespace MerMail
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new ); //later
             initMermailDB();
-            Application.Run(new Form1());
+            Login flogin = new Login();
+            if (flogin.ShowDialog() == DialogResult.OK)
+            {
+                Application.Run(new Form1());
+            }
+            else
+            {
+                Application.Exit();
+            }
+            //Application.Run(new Form1());
             MessageBox.Show("Nu lukkes Loginform - sqlCon afbrydes");
             sqlCon.Close();
         }
