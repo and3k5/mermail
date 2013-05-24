@@ -106,11 +106,15 @@ namespace MerMail
 
                 authclient.Authenticate(username, password);
 
-                MessageBox.Show("con:"+authclient.Connected);
+                //MessageBox.Show("con:"+authclient.Connected);
                 
                 if (authclient.Connected.Equals(true))
                 {
-                    Application.Run(new Form1());
+                    Form.ActiveForm.Close();
+                    //Form.ActiveForm.Hide();
+                    //Form1 nform = new Form1();
+                    //nform.ShowDialog();
+                    //Application.Exit();
                 }
                 else
                 {
