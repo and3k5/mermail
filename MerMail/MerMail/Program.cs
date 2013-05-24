@@ -20,7 +20,7 @@ namespace MerMail
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new ); //later
             initMermailDB();
-            Application.Run(new Login());
+            Application.Run(new Form1());
             MessageBox.Show("Nu lukkes Loginform - sqlCon afbrydes");
             sqlCon.Close();
         }
@@ -69,7 +69,7 @@ namespace MerMail
 
             //transact = sqlCon.BeginTransaction();
             int rtn=cmd.ExecuteNonQuery();
-
+            MessageBox.Show(rtn.ToString());
             return 0;
             
             //cmd.CommandText = "CREATE TABLE IF NOT EXISTS users ( id INTEGER PRIMARY KEY AUTOINCREMENT, mailaddress VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, pop_hostname VARCHAR(255) not null, pop_port INTEGER not null, pop_ssl BOOLEAN not null )";
