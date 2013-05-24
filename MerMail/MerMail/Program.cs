@@ -16,7 +16,6 @@ namespace MerMail
         [STAThread]
         static void Main()
         {
-            // LETS GET THIS PYJAMAS PARTY STARTED!
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new ); //later
