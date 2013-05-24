@@ -19,6 +19,7 @@ namespace MerMail
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new ); //later
+            // nom nom nom nom
             Application.Run(new Form1());
         }
         public readonly static string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
