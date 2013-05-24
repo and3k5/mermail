@@ -59,6 +59,23 @@ namespace MerMail
 
 
         }
+        public static struct mailaccount {
+            public int id;
+            public string mailaddress;
+            public string password;
+            public string pop_hostname;
+            public int pop_port;
+            public bool pop_ssl;
+            public mailaccount(int _id,string _mailaddress, string _password, string _pop_hostname, int _pop_port, bool _pop_ssl) {
+                id=_id;
+                mailaddress=_mailaddress;
+                password=_password;
+                pop_hostname=_pop_hostname;
+                pop_port=_pop_port;
+                pop_ssl=_pop_ssl;
+            }
+
+        }
         public static int insertUser(string mailaddr, string password, string pop_hostname, int pop_port, bool pop_ssl)
         {
             //SQLiteTransaction transact;
@@ -83,6 +100,23 @@ namespace MerMail
             
             //cmd.CommandText = "CREATE TABLE IF NOT EXISTS users ( id INTEGER PRIMARY KEY AUTOINCREMENT, mailaddress VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, pop_hostname VARCHAR(255) not null, pop_port INTEGER not null, pop_ssl BOOLEAN not null )";
             //cmd.ExecuteNonQuery();
+        }
+        public static List<mailaccount> getAccounts()
+        {
+            string sqlquery = "SELECT * FROM users";
+            SQLiteCommand cmd = sqlCon.CreateCommand();
+            cmd.CommandText = sqlquery;
+            SQLiteDataAdapter sqladapt = new SQLiteDataAdapter(cmd);
+            System.Data.DataSet sqlset = new System.Data.DataSet();
+            System.Data.DataTable tbl = new System.Data.DataTable();
+            sqladapt.Fill(tbl);
+            List<mailaccount> rtn = new List<mailaccount>();
+            foreach (System.Data.DataRow row in tbl.Rows) {
+                // row.
+                rtn.Add(new mailaccount())
+            }
+            
+
         }
         public static List<OpenPop.Mime.Message> FetchAllMessages(string Hostname, int port, bool usessl, string username, string password)
         {
