@@ -20,7 +20,6 @@ namespace MerMail
             Application.SetCompatibleTextRenderingDefault(false);
             initMermailDB();
             Application.Run(new Form1());
-            //MessageBox.Show("Nu lukkes Loginform - sqlCon afbrydes");
             sqlCon.Close();
         }
 
@@ -30,12 +29,12 @@ namespace MerMail
         public static SQLiteConnection sqlCon;
         private static void initMermailDB()
         {
-            if (System.IO.Directory.Exists(appdata+"/mermail/") == false)
+            if (System.IO.Directory.Exists(appdata + "/mermail/") == false)
             {
-                System.IO.Directory.CreateDirectory(appdata+"/mermail/");
+                System.IO.Directory.CreateDirectory(appdata + "/mermail/");
             }
             SQLiteConnectionStringBuilder conStr = new SQLiteConnectionStringBuilder();
-            conStr.DataSource = appdata+"/mermail/mermail.db";
+            conStr.DataSource = appdata + "/mermail/mermail.db";
             conStr.Version = 3;
 
             sqlCon = new SQLiteConnection(conStr.ConnectionString);
@@ -45,38 +44,33 @@ namespace MerMail
             SQLiteCommand cmd = sqlCon.CreateCommand();
             cmd.CommandText = "CREATE TABLE IF NOT EXISTS users ( id INTEGER PRIMARY KEY AUTOINCREMENT, mailaddress VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, pop_hostname VARCHAR(255) not null, pop_port INTEGER not null, pop_ssl BOOLEAN not null )";
             cmd.ExecuteNonQuery();
-            //sqlCon.Close();
-            //con.CreateFile("%appdata%/.mermail/mermail.db");
-
-
-
-
         }
-        public struct mailaccount {
+        public struct mailaccount
+        {
             public int id;
             public string mailaddress;
             public string password;
             public string pop_hostname;
             public int pop_port;
             public bool pop_ssl;
-            public mailaccount(int _id,string _mailaddress, string _password, string _pop_hostname, int _pop_port, bool _pop_ssl) {
-                id=_id;
-                mailaddress=_mailaddress;
-                password=_password;
-                pop_hostname=_pop_hostname;
-                pop_port=_pop_port;
-                pop_ssl=_pop_ssl;
+            public mailaccount(int _id, string _mailaddress, string _password, string _pop_hostname, int _pop_port, bool _pop_ssl)
+            {
+                id = _id;
+                mailaddress = _mailaddress;
+                password = _password;
+                pop_hostname = _pop_hostname;
+                pop_port = _pop_port;
+                pop_ssl = _pop_ssl;
             }
 
         }
         public static int insertUser(string mailaddr, string password, string pop_hostname, int pop_port, bool pop_ssl)
         {
-            //SQLiteTransaction transact;
             string countQuery = "SELECT COUNT(*) FROM users WHERE mailaddress=@_mailaddress";
             SQLiteCommand countCmd = sqlCon.CreateCommand();
             countCmd.CommandText = countQuery;
             countCmd.Parameters.AddWithValue("@_mailaddress", mailaddr);
-            int count = Convert.ToInt32( countCmd.ExecuteScalar() );
+            int count = Convert.ToInt32(countCmd.ExecuteScalar());
             int id;
             if (count == 0)
             {
@@ -95,14 +89,12 @@ namespace MerMail
 
                 cmd.Parameters.AddWithValue("@_pop_ssl", popSSL);
 
-                //transact = sqlCon.BeginTransaction();
                 int rtn = cmd.ExecuteNonQuery();
 
                 string getIDQuery = "select last_insert_rowid()";
                 SQLiteCommand getIDCmd = sqlCon.CreateCommand();
                 getIDCmd.CommandText = getIDQuery;
                 id = Convert.ToInt32(getIDCmd.ExecuteScalar());
-                //MessageBox.Show(rtn.ToString());
             }
             else
             {
@@ -120,7 +112,6 @@ namespace MerMail
 
                 cmd.Parameters.AddWithValue("@_pop_ssl", popSSL);
 
-                //transact = sqlCon.BeginTransaction();
                 int rtn = cmd.ExecuteNonQuery();
 
                 string getIDQuery = "SELECT id FROM users WHERE mailaddress=@_mailaddress";
@@ -128,12 +119,8 @@ namespace MerMail
                 getIDCmd.CommandText = getIDQuery;
                 getIDCmd.Parameters.AddWithValue("@_mailaddress", mailaddr);
                 id = Convert.ToInt32(getIDCmd.ExecuteScalar());
-                //MessageBox.Show(rtn.ToString());
             }
             return id;
-            
-            //cmd.CommandText = "CREATE TABLE IF NOT EXISTS users ( id INTEGER PRIMARY KEY AUTOINCREMENT, mailaddress VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, pop_hostname VARCHAR(255) not null, pop_port INTEGER not null, pop_ssl BOOLEAN not null )";
-            //cmd.ExecuteNonQuery();
         }
         public static List<mailaccount> getAccounts()
         {
@@ -145,28 +132,16 @@ namespace MerMail
             System.Data.DataTable tbl = new System.Data.DataTable();
             sqladapt.Fill(tbl);
             List<mailaccount> rtn = new List<mailaccount>();
-            foreach (System.Data.DataRow row in tbl.Rows) {
-                // row.
+            foreach (System.Data.DataRow row in tbl.Rows)
+            {
                 mailaccount tmp = new mailaccount(Convert.ToInt16(row.ItemArray[0]), Convert.ToString(row.ItemArray[1]), Convert.ToString(row.ItemArray[2]), Convert.ToString(row.ItemArray[3]), Convert.ToInt16(row.ItemArray[4]), Convert.ToBoolean(row.ItemArray[5]));
-                //MessageBox.Show(row.ItemArray[0].ToString());
                 rtn.Add(tmp);
             }
             return rtn;
 
         }
-        public static List<OpenPop.Mime.Message> FetchAllMessages(string Hostname, int port, bool usessl, string username, string password)
+        public static List<OpenPop.Mime.Message> FetchAllMessages()
         {
-            //using(OpenPop.Pop3.Pop3Client client = new OpenPop.Pop3.Pop3Client())
-            //{
-
-            //connection
-            popClient.Connect(Hostname, port, usessl);
-
-            // authenticate
-            popClient.Authenticate(username, password);
-
-            //popClient.
-
             int messageCount = popClient.GetMessageCount();
 
             List<OpenPop.Mime.Message> allMessages = new List<OpenPop.Mime.Message>(messageCount);
@@ -176,10 +151,8 @@ namespace MerMail
                 allMessages.Add(popClient.GetMessage(i));
             }
             return allMessages;
-
-            //}
         }
-        public static bool AuthenticateLog(string Hostname, int port, bool usessl, string username, string password) 
+        public static bool AuthenticateLog(string Hostname, int port, bool usessl, string username, string password)
         {
             popauth = true;
             try

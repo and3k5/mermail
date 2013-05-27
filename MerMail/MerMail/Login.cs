@@ -21,7 +21,8 @@ namespace MerMail
         {
             accounts = MerMail.Program.getAccounts();
             comboBox1.Items.Clear();
-            foreach (MerMail.Program.mailaccount acc in accounts) {
+            foreach (MerMail.Program.mailaccount acc in accounts)
+            {
                 comboBox1.Items.Add(acc.mailaddress);
             }
 

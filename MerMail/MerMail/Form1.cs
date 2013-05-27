@@ -18,15 +18,20 @@ namespace MerMail
             MerMail.Program.login();
         }
 
-        private void loginBtn_Click(object sender, EventArgs e)
+        List<OpenPop.Mime.Message> result;
+        private void Form1_Load(object sender, EventArgs e)
         {
             try
             {
-                mailBox.Items.Clear();
-                List<OpenPop.Mime.Message> result = MerMail.Program.FetchAllMessages(HostNameBox.Text, Convert.ToInt32(PortBox.Text), useSslCheckbox.Checked, UserBox.Text, PassBox.Text);
-                //mailBox.Items.
-                foreach (OpenPop.Mime.Message mail in result) {
-                    mailBox.Items.Add(mail.Headers.Subject);
+                if (MerMail.Program.popauth)
+                {
+                    mailBox.Items.Clear();
+                    result = MerMail.Program.FetchAllMessages();
+                    // List subjects in listbox
+                    foreach (OpenPop.Mime.Message mail in result)
+                    {
+                        mailBox.Items.Add(mail.Headers.Subject);
+                    }
                 }
             }
             catch (Exception err)
@@ -35,9 +40,23 @@ namespace MerMail
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void mailBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-         //   MerMail.Program.initMermailDB(); // skal køres ved startup istedet (måske)
+            OpenPop.Mime.Message currentMail = result.ToArray()[mailBox.SelectedIndex];
+            // Goodmorning IE
+            webBrowser1.Navigate("about:blank");
+            HtmlDocument document = webBrowser1.Document;
+            document.Write(String.Empty);
+            // Is MediaType multipart or not?
+            switch (currentMail.MessagePart.ContentType.MediaType)
+            {
+                default:
+                    webBrowser1.DocumentText = currentMail.FindFirstPlainTextVersion().GetBodyAsText();
+                    break;
+                case "multipart/alternative":
+                    webBrowser1.DocumentText = currentMail.FindFirstHtmlVersion().GetBodyAsText();
+                    break;
+            }
         }
 
     }
