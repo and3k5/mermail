@@ -30,7 +30,7 @@ namespace MerMail
                 Application.Exit();
             }
             //Application.Run(new Form1());
-            MessageBox.Show("Nu lukkes Loginform - sqlCon afbrydes");
+            //MessageBox.Show("Nu lukkes Loginform - sqlCon afbrydes");
             sqlCon.Close();
         }
         public readonly static string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -59,7 +59,7 @@ namespace MerMail
 
 
         }
-        public static struct mailaccount {
+        public struct mailaccount {
             public int id;
             public string mailaddress;
             public string password;
@@ -79,24 +79,65 @@ namespace MerMail
         public static int insertUser(string mailaddr, string password, string pop_hostname, int pop_port, bool pop_ssl)
         {
             //SQLiteTransaction transact;
-            string sqlquery = "INSERT INTO users (mailaddress,password,pop_hostname,pop_port,pop_ssl) ";
-            sqlquery += "VALUES (@_mailaddress,@_password,@_pop_hostname,@_pop_port,@_pop_ssl)";
+            string countQuery = "SELECT COUNT(*) FROM users WHERE mailaddress=@_mailaddress";
+            SQLiteCommand countCmd = sqlCon.CreateCommand();
+            countCmd.CommandText = countQuery;
+            countCmd.Parameters.AddWithValue("@_mailaddress", mailaddr);
+            int count = Convert.ToInt32( countCmd.ExecuteScalar() );
+            int id;
+            if (count == 0)
+            {
 
-            SQLiteCommand cmd = sqlCon.CreateCommand();
-            cmd.CommandText = sqlquery;
-            cmd.Parameters.AddWithValue("@_mailaddress", mailaddr);
-            cmd.Parameters.AddWithValue("@_password", password);
-            cmd.Parameters.AddWithValue("@_pop_hostname", pop_hostname);
-            cmd.Parameters.AddWithValue("@_pop_port", pop_port);
-            int popSSL = 0;
-            if (pop_ssl == true) popSSL = 1;
+                string sqlquery = "INSERT INTO users (mailaddress,password,pop_hostname,pop_port,pop_ssl) ";
+                sqlquery += "VALUES (@_mailaddress,@_password,@_pop_hostname,@_pop_port,@_pop_ssl)";
 
-            cmd.Parameters.AddWithValue("@_pop_ssl", popSSL);
+                SQLiteCommand cmd = sqlCon.CreateCommand();
+                cmd.CommandText = sqlquery;
+                cmd.Parameters.AddWithValue("@_mailaddress", mailaddr);
+                cmd.Parameters.AddWithValue("@_password", password);
+                cmd.Parameters.AddWithValue("@_pop_hostname", pop_hostname);
+                cmd.Parameters.AddWithValue("@_pop_port", pop_port);
+                int popSSL = 0;
+                if (pop_ssl == true) popSSL = 1;
 
-            //transact = sqlCon.BeginTransaction();
-            int rtn=cmd.ExecuteNonQuery();
-            MessageBox.Show(rtn.ToString());
-            return 0;
+                cmd.Parameters.AddWithValue("@_pop_ssl", popSSL);
+
+                //transact = sqlCon.BeginTransaction();
+                int rtn = cmd.ExecuteNonQuery();
+
+                string getIDQuery = "select last_insert_rowid()";
+                SQLiteCommand getIDCmd = sqlCon.CreateCommand();
+                getIDCmd.CommandText = getIDQuery;
+                id = Convert.ToInt32(getIDCmd.ExecuteScalar());
+                //MessageBox.Show(rtn.ToString());
+            }
+            else
+            {
+                string sqlquery = "UPDATE users SET mailaddress=@_mailaddress,password=@_password,pop_hostname=@_pop_hostname,pop_port=@_pop_port,pop_ssl=@_pop_ssl ";
+                sqlquery += "WHERE mailaddress=@_mailaddress";
+
+                SQLiteCommand cmd = sqlCon.CreateCommand();
+                cmd.CommandText = sqlquery;
+                cmd.Parameters.AddWithValue("@_mailaddress", mailaddr);
+                cmd.Parameters.AddWithValue("@_password", password);
+                cmd.Parameters.AddWithValue("@_pop_hostname", pop_hostname);
+                cmd.Parameters.AddWithValue("@_pop_port", pop_port);
+                int popSSL = 0;
+                if (pop_ssl == true) popSSL = 1;
+
+                cmd.Parameters.AddWithValue("@_pop_ssl", popSSL);
+
+                //transact = sqlCon.BeginTransaction();
+                int rtn = cmd.ExecuteNonQuery();
+
+                string getIDQuery = "SELECT id FROM users WHERE mailaddress=@_mailaddress";
+                SQLiteCommand getIDCmd = sqlCon.CreateCommand();
+                getIDCmd.CommandText = getIDQuery;
+                getIDCmd.Parameters.AddWithValue("@_mailaddress", mailaddr);
+                id = Convert.ToInt32(getIDCmd.ExecuteScalar());
+                //MessageBox.Show(rtn.ToString());
+            }
+            return id;
             
             //cmd.CommandText = "CREATE TABLE IF NOT EXISTS users ( id INTEGER PRIMARY KEY AUTOINCREMENT, mailaddress VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, pop_hostname VARCHAR(255) not null, pop_port INTEGER not null, pop_ssl BOOLEAN not null )";
             //cmd.ExecuteNonQuery();
@@ -113,9 +154,11 @@ namespace MerMail
             List<mailaccount> rtn = new List<mailaccount>();
             foreach (System.Data.DataRow row in tbl.Rows) {
                 // row.
-                rtn.Add(new mailaccount())
+                mailaccount tmp = new mailaccount(Convert.ToInt16(row.ItemArray[0]), Convert.ToString(row.ItemArray[1]), Convert.ToString(row.ItemArray[2]), Convert.ToString(row.ItemArray[3]), Convert.ToInt16(row.ItemArray[4]), Convert.ToBoolean(row.ItemArray[5]));
+                //MessageBox.Show(row.ItemArray[0].ToString());
+                rtn.Add(tmp);
             }
-            
+            return rtn;
 
         }
         public static List<OpenPop.Mime.Message> FetchAllMessages(string Hostname, int port, bool usessl, string username, string password)

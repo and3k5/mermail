@@ -16,9 +16,14 @@ namespace MerMail
         {
             InitializeComponent();
         }
-
+        private List<MerMail.Program.mailaccount> accounts;
         private void Login_Load(object sender, EventArgs e)
         {
+            accounts = MerMail.Program.getAccounts();
+            comboBox1.Items.Clear();
+            foreach (MerMail.Program.mailaccount acc in accounts) {
+                comboBox1.Items.Add(acc.mailaddress);
+            }
 
         }
 
@@ -27,11 +32,23 @@ namespace MerMail
             try
             {
                 MerMail.Program.AuthenticateLog(HostNameBox.Text, Convert.ToInt32(PortBox.Text), useSslCheckbox.Checked, UserBox.Text, PassBox.Text);
+                MerMail.Program.insertUser(UserBox.Text, PassBox.Text, HostNameBox.Text, Convert.ToInt16(PortBox.Text), useSslCheckbox.Checked);
+
             }
             catch (Exception err)
             {
                 MessageBox.Show("Der skete en fejl..." + err.Message);
             }
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            MerMail.Program.mailaccount selectedAccount = accounts.ToArray()[(sender as ComboBox).SelectedIndex];
+            HostNameBox.Text = selectedAccount.pop_hostname;
+            PortBox.Text = selectedAccount.pop_port.ToString();
+            useSslCheckbox.Checked = selectedAccount.pop_ssl;
+            UserBox.Text = selectedAccount.mailaddress;
+            PassBox.Text = selectedAccount.password;
         }
     }
 }
