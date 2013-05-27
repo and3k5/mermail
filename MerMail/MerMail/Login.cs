@@ -31,9 +31,16 @@ namespace MerMail
         {
             try
             {
-                MerMail.Program.AuthenticateLog(HostNameBox.Text, Convert.ToInt32(PortBox.Text), useSslCheckbox.Checked, UserBox.Text, PassBox.Text);
+                bool auth = MerMail.Program.AuthenticateLog(HostNameBox.Text, Convert.ToInt32(PortBox.Text), useSslCheckbox.Checked, UserBox.Text, PassBox.Text);
                 MerMail.Program.insertUser(UserBox.Text, PassBox.Text, HostNameBox.Text, Convert.ToInt16(PortBox.Text), useSslCheckbox.Checked);
-
+                if (auth)
+                {
+                    this.DialogResult = DialogResult.OK;
+                }
+                else
+                {
+                    this.DialogResult = DialogResult.None;
+                }
             }
             catch (Exception err)
             {

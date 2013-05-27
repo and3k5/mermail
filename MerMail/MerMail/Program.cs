@@ -18,25 +18,17 @@ namespace MerMail
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //Application.Run(new ); //later
             initMermailDB();
-            Login flogin = new Login();
-            if (flogin.ShowDialog() == DialogResult.OK)
-            {
-                Application.Run(new Form1());
-            }
-            else
-            {
-                Application.Exit();
-            }
-            //Application.Run(new Form1());
+            Application.Run(new Form1());
             //MessageBox.Show("Nu lukkes Loginform - sqlCon afbrydes");
             sqlCon.Close();
         }
+
+        public static bool popauth;
         private static OpenPop.Pop3.Pop3Client popClient = new OpenPop.Pop3.Pop3Client();
         public readonly static string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         public static SQLiteConnection sqlCon;
-        public static void initMermailDB()
+        private static void initMermailDB()
         {
             if (System.IO.Directory.Exists(appdata+"/mermail/") == false)
             {
@@ -187,29 +179,55 @@ namespace MerMail
 
             //}
         }
-        public static void AuthenticateLog(string Hostname, int port, bool usessl, string username, string password) 
+        public static bool AuthenticateLog(string Hostname, int port, bool usessl, string username, string password) 
         {
+            popauth = true;
             try
             {
+                if (popClient.Connected.Equals(true))
+                {
+                    popClient.Disconnect();
+                }
                 popClient.Connect(Hostname, port, usessl);
 
                 if (popClient.Connected.Equals(true))
                 {
                     popClient.Authenticate(username, password);
-                    Form.ActiveForm.Close();
                 }
                 else
                 {
                     MessageBox.Show("Kunne ikke oprette forbindelse til serveren");
+                    popauth = false;
                 }
             }
             catch (OpenPop.Pop3.Exceptions.InvalidLoginException err)
             {
+                popauth = false;
                 MessageBox.Show("Serveren accepterede ikke login");
             }
             catch (Exception err)
             {
+                popauth = false;
                 MessageBox.Show("Der skete en ukendt fejl..." + err);
+            }
+            return popauth;
+        }
+
+        public static void login()
+        {
+            Login flogin = new Login();
+            DialogResult res = flogin.ShowDialog();
+            if (res == DialogResult.OK && popauth == true)
+            {
+                flogin.Close();
+            }
+            else if (res == DialogResult.None)
+            {
+                Application.Exit();
+            }
+            else if (popauth == false && res == DialogResult.OK)
+            {
+
             }
         }
     }

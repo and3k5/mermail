@@ -43,7 +43,6 @@
             // 
             // loginBtn
             // 
-            this.loginBtn.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.loginBtn.Location = new System.Drawing.Point(86, 161);
             this.loginBtn.Name = "loginBtn";
             this.loginBtn.Size = new System.Drawing.Size(89, 19);

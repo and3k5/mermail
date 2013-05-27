@@ -15,6 +15,7 @@ namespace MerMail
         public Form1()
         {
             InitializeComponent();
+            MerMail.Program.login();
         }
 
         private void loginBtn_Click(object sender, EventArgs e)
@@ -36,7 +37,7 @@ namespace MerMail
 
         private void button1_Click(object sender, EventArgs e)
         {
-            MerMail.Program.initMermailDB(); // skal køres ved startup istedet (måske)
+         //   MerMail.Program.initMermailDB(); // skal køres ved startup istedet (måske)
         }
 
     }
