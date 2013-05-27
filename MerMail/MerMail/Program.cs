@@ -33,6 +33,7 @@ namespace MerMail
             //MessageBox.Show("Nu lukkes Loginform - sqlCon afbrydes");
             sqlCon.Close();
         }
+        private static OpenPop.Pop3.Pop3Client popClient = new OpenPop.Pop3.Pop3Client();
         public readonly static string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         public static SQLiteConnection sqlCon;
         public static void initMermailDB()
@@ -163,53 +164,52 @@ namespace MerMail
         }
         public static List<OpenPop.Mime.Message> FetchAllMessages(string Hostname, int port, bool usessl, string username, string password)
         {
-            using(OpenPop.Pop3.Pop3Client client = new OpenPop.Pop3.Pop3Client())
+            //using(OpenPop.Pop3.Pop3Client client = new OpenPop.Pop3.Pop3Client())
+            //{
+
+            //connection
+            popClient.Connect(Hostname, port, usessl);
+
+            // authenticate
+            popClient.Authenticate(username, password);
+
+            //popClient.
+
+            int messageCount = popClient.GetMessageCount();
+
+            List<OpenPop.Mime.Message> allMessages = new List<OpenPop.Mime.Message>(messageCount);
+
+            for (int i = messageCount; i > 0; i--)
             {
-                //connection
-                client.Connect(Hostname, port, usessl);
-
-                // authenticate
-                client.Authenticate(username, password);
-
-                int messageCount = client.GetMessageCount();
-
-                List<OpenPop.Mime.Message> allMessages = new List<OpenPop.Mime.Message>(messageCount);
-
-                for (int i = messageCount; i > 0; i--)
-                {
-                    allMessages.Add(client.GetMessage(i));
-                }
-                return allMessages;
+                allMessages.Add(popClient.GetMessage(i));
             }
+            return allMessages;
+
+            //}
         }
         public static void AuthenticateLog(string Hostname, int port, bool usessl, string username, string password) 
         {
             try
             {
-                OpenPop.Pop3.Pop3Client authclient = new OpenPop.Pop3.Pop3Client();
+                popClient.Connect(Hostname, port, usessl);
 
-                authclient.Connect(Hostname, port, usessl);
-
-                authclient.Authenticate(username, password);
-
-                //MessageBox.Show("con:"+authclient.Connected);
-                
-                if (authclient.Connected.Equals(true))
+                if (popClient.Connected.Equals(true))
                 {
+                    popClient.Authenticate(username, password);
                     Form.ActiveForm.Close();
-                    //Form.ActiveForm.Hide();
-                    //Form1 nform = new Form1();
-                    //nform.ShowDialog();
-                    //Application.Exit();
                 }
                 else
                 {
-                    MessageBox.Show("Authentication failed");
+                    MessageBox.Show("Kunne ikke oprette forbindelse til serveren");
                 }
+            }
+            catch (OpenPop.Pop3.Exceptions.InvalidLoginException err)
+            {
+                MessageBox.Show("Serveren accepterede ikke login");
             }
             catch (Exception err)
             {
-                MessageBox.Show("Der skete en fejl..."+err);
+                MessageBox.Show("Der skete en ukendt fejl..." + err);
             }
         }
     }
