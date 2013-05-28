@@ -69,5 +69,11 @@ namespace MerMail
             MerMail.Program.logout();
         }
 
+        private void sendMailToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Send newsend = new Send();
+            newsend.ShowDialog();
+        }
+
     }
 }

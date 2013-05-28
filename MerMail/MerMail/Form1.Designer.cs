@@ -110,6 +110,7 @@
             this.sendMailToolStripMenuItem.Name = "sendMailToolStripMenuItem";
             this.sendMailToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
             this.sendMailToolStripMenuItem.Text = "Send Mail";
+            this.sendMailToolStripMenuItem.Click += new System.EventHandler(this.sendMailToolStripMenuItem_Click);
             // 
             // logoutToolStripMenuItem
             // 
