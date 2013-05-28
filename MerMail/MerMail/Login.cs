@@ -19,6 +19,7 @@ namespace MerMail
         private List<MerMail.Program.mailaccount> accounts;
         private void Login_Load(object sender, EventArgs e)
         {
+            this.BringToFront();
             accounts = MerMail.Program.getAccounts();
             comboBox1.Items.Clear();
             foreach (MerMail.Program.mailaccount acc in accounts)

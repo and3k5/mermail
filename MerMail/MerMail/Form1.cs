@@ -14,13 +14,14 @@ namespace MerMail
     {
         public Form1()
         {
-            MerMail.Program.login();
             InitializeComponent();
         }
 
         List<MerMail.Program.email> result;
         private void Form1_Load(object sender, EventArgs e)
         {
+            this.BringToFront();
+            MerMail.Program.login();
             try
             {
                 if (MerMail.Program.popauth)
@@ -65,7 +66,7 @@ namespace MerMail
 
         private void logoutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            MerMail.Program.logout();
         }
 
     }
