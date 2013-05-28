@@ -58,6 +58,8 @@ namespace MerMail
             useSslCheckbox.Checked = selectedAccount.pop_ssl;
             UserBox.Text = selectedAccount.mailaddress;
             PassBox.Text = selectedAccount.password;
+            SmtpName.Text = selectedAccount.smtp_hostname;
+            SmtpPort.Text = selectedAccount.smtp_port.ToString();
         }
     }
 }
