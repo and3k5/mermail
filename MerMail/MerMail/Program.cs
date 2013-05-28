@@ -7,6 +7,7 @@ using OpenPop;
 using System.Data.SQLite;
 using System.Security.Cryptography;
 using System.Text;
+using System.Net.Mail;
 
 
 namespace MerMail
@@ -28,9 +29,11 @@ namespace MerMail
 
         public static bool popauth;
         private static OpenPop.Pop3.Pop3Client popClient = new OpenPop.Pop3.Pop3Client();
+        private static SmtpClient smtpClient;
         public readonly static string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         private static SQLiteConnection sqlCon; // used for user database
         private static SQLiteConnection msgSqlCon; // used for storing emails 
+        private static mailaccount currentUser;
         private static void initMermailDB()
         {
             // sqlCon - user database
@@ -44,7 +47,8 @@ namespace MerMail
             sqlCon = new SQLiteConnection(conStr.ConnectionString);
             sqlCon.Open();
 
-            SQLiteCommand cmd = new SQLiteCommand("CREATE TABLE IF NOT EXISTS users (mailaddress VARCHAR(255) PRIMARY KEY NOT NULL, password VARCHAR(255) NOT NULL, pop_hostname VARCHAR(255) not null, pop_port INTEGER not null, pop_ssl BOOLEAN not null )", sqlCon);
+            //SQLiteCommand cmd = new SQLiteCommand("CREATE TABLE IF NOT EXISTS users (mailaddress VARCHAR(255) PRIMARY KEY NOT NULL, password VARCHAR(255) NOT NULL, pop_hostname VARCHAR(255) not null, pop_port INTEGER not null, pop_ssl BOOLEAN not null )", sqlCon);
+            SQLiteCommand cmd = new SQLiteCommand("CREATE TABLE IF NOT EXISTS users (mailaddress VARCHAR(255) PRIMARY KEY NOT NULL, password VARCHAR(255) NOT NULL, pop_hostname VARCHAR(255) not null, pop_port INTEGER not null, pop_ssl BOOLEAN not null,smtp_hostname VARCHAR(255) not null, smtp_port INTEGER not null,smtp_ssl BOOLEAN not null)", sqlCon);
             cmd.ExecuteNonQuery();
 
             // msgSqlCon
@@ -60,13 +64,19 @@ namespace MerMail
             public string pop_hostname;
             public int pop_port;
             public bool pop_ssl;
-            public mailaccount(string _mailaddress, string _password, string _pop_hostname, int _pop_port, bool _pop_ssl)
+            public string smtp_hostname;
+            public int smtp_port;
+            public bool smtp_ssl;
+            public mailaccount(string _mailaddress, string _password, string _pop_hostname, int _pop_port, bool _pop_ssl, string _smtp_hostname, int _smtp_port, bool _smtp_ssl)
             {
                 mailaddress = _mailaddress;
                 password = _password;
                 pop_hostname = _pop_hostname;
                 pop_port = _pop_port;
                 pop_ssl = _pop_ssl;
+                smtp_hostname = _smtp_hostname;
+                smtp_port = _smtp_port;
+                smtp_ssl = _smtp_ssl;
             }
 
         }
@@ -83,20 +93,24 @@ namespace MerMail
                 body = _body;
                 date = _date;
             }
-
         }
-        public static int insertUser(string mailaddr, string password, string pop_hostname, int pop_port, bool pop_ssl)
+        public static int insertUser(string mailaddr, string password, string pop_hostname, int pop_port, bool pop_ssl, string smtp_hostname, int smtp_port, bool smtp_ssl)
         {
             // Insert user to the table if it doesn't exist
-            string insertQuery = "INSERT OR IGNORE INTO users (mailaddress,password,pop_hostname,pop_port,pop_ssl) ";
-            insertQuery += "VALUES (@_mailaddress,@_password,@_pop_hostname,@_pop_port,@_pop_ssl)";
+            string insertQuery = "INSERT OR IGNORE INTO users (mailaddress,password,pop_hostname,pop_port,pop_ssl,smtp_hostname,smtp_port,smtp_ssl) ";
+            insertQuery += "VALUES (@_mailaddress,@_password,@_pop_hostname,@_pop_port,@_pop_ssl,@_smtp_hostname,@_smtp_port,@_smtp_ssl)";
             SQLiteCommand insertCmd = new SQLiteCommand(insertQuery, sqlCon);
             insertCmd.Parameters.AddWithValue("@_mailaddress", mailaddr);
             insertCmd.Parameters.AddWithValue("@_password", password);
             insertCmd.Parameters.AddWithValue("@_pop_hostname", pop_hostname);
             insertCmd.Parameters.AddWithValue("@_pop_port", pop_port);
             insertCmd.Parameters.AddWithValue("@_pop_ssl", Convert.ToInt16(pop_ssl));
+            insertCmd.Parameters.AddWithValue("@_smtp_hostname", smtp_hostname);
+            insertCmd.Parameters.AddWithValue("@_smtp_port", smtp_port);
+            insertCmd.Parameters.AddWithValue("@_smtp_ssl", Convert.ToInt16(smtp_ssl));
             insertCmd.ExecuteNonQuery();
+
+            currentUser = new mailaccount(mailaddr,password,pop_hostname,pop_port,pop_ssl,smtp_hostname,smtp_port,smtp_ssl);
 
             // Is used for making a name of the message database file for the user
             string userMD5 = genMd5(mailaddr);
@@ -114,7 +128,7 @@ namespace MerMail
         }
         public static List<mailaccount> getAccounts()
         {
-            SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM users", sqlCon);
+            SQLiteCommand cmd = new SQLiteCommand("SELECT mailaddress,password,pop_hostname,pop_port,pop_ssl,smtp_hostname,smtp_port,smtp_ssl FROM users", sqlCon);
             SQLiteDataAdapter sqladapt = new SQLiteDataAdapter(cmd);
             System.Data.DataSet sqlset = new System.Data.DataSet();
             System.Data.DataTable tbl = new System.Data.DataTable();
@@ -122,7 +136,7 @@ namespace MerMail
             List<mailaccount> rtn = new List<mailaccount>();
             foreach (System.Data.DataRow row in tbl.Rows)
             {
-                mailaccount tmp = new mailaccount(Convert.ToString(row.ItemArray[0]), Convert.ToString(row.ItemArray[1]), Convert.ToString(row.ItemArray[2]), Convert.ToInt16(row.ItemArray[3]), Convert.ToBoolean(row.ItemArray[4]));
+                mailaccount tmp = new mailaccount(Convert.ToString(row.ItemArray[0]), Convert.ToString(row.ItemArray[1]), Convert.ToString(row.ItemArray[2]), Convert.ToInt16(row.ItemArray[3]), Convert.ToBoolean(row.ItemArray[4]), Convert.ToString(row.ItemArray[5]), Convert.ToInt16(row.ItemArray[6]), Convert.ToBoolean(row.ItemArray[7]));
                 rtn.Add(tmp);
             }
             return rtn;
@@ -234,6 +248,24 @@ namespace MerMail
             }
             return popauth;
         }
+
+        public static void SendMail(string to,string subject,string body)
+        {
+            smtpClient = new SmtpClient(currentUser.smtp_hostname);
+            MailMessage mail = new MailMessage();
+
+            mail.From = new MailAddress(currentUser.mailaddress);
+            mail.To.Add(to);
+            mail.Subject = subject;
+            mail.Body = body;
+
+            smtpClient.Port = currentUser.smtp_port;
+            smtpClient.Credentials = new System.Net.NetworkCredential(currentUser.mailaddress, currentUser.password);
+            smtpClient.EnableSsl = currentUser.smtp_ssl;
+
+            smtpClient.Send(mail);
+        }
+
 
         public static void login()
         {
