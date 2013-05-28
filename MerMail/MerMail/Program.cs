@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using OpenPop;
 using System.Data.SQLite;
+using System.Security.Cryptography;
+using System.Text;
+
 
 namespace MerMail
 {
@@ -26,9 +29,11 @@ namespace MerMail
         public static bool popauth;
         private static OpenPop.Pop3.Pop3Client popClient = new OpenPop.Pop3.Pop3Client();
         public readonly static string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        public static SQLiteConnection sqlCon;
+        private static SQLiteConnection sqlCon; // used for user database
+        private static SQLiteConnection msgSqlCon; // used for storing emails 
         private static void initMermailDB()
         {
+            // sqlCon - user database
             if (System.IO.Directory.Exists(appdata + "/mermail/") == false)
             {
                 System.IO.Directory.CreateDirectory(appdata + "/mermail/");
@@ -36,14 +41,16 @@ namespace MerMail
             SQLiteConnectionStringBuilder conStr = new SQLiteConnectionStringBuilder();
             conStr.DataSource = appdata + "/mermail/mermail.db";
             conStr.Version = 3;
-
             sqlCon = new SQLiteConnection(conStr.ConnectionString);
-
             sqlCon.Open();
-
-            SQLiteCommand cmd = sqlCon.CreateCommand();
-            cmd.CommandText = "CREATE TABLE IF NOT EXISTS users ( id INTEGER PRIMARY KEY AUTOINCREMENT, mailaddress VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, pop_hostname VARCHAR(255) not null, pop_port INTEGER not null, pop_ssl BOOLEAN not null )";
+            SQLiteCommand cmd = new SQLiteCommand("CREATE TABLE IF NOT EXISTS users ( id INTEGER PRIMARY KEY AUTOINCREMENT, mailaddress VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, pop_hostname VARCHAR(255) not null, pop_port INTEGER not null, pop_ssl BOOLEAN not null )", sqlCon);
             cmd.ExecuteNonQuery();
+
+            // msgSqlCon
+            if (System.IO.Directory.Exists(appdata + "/mermail/userdata") == false)
+            {
+                System.IO.Directory.CreateDirectory(appdata + "/mermail/userdata/");
+            }
         }
         public struct mailaccount
         {
@@ -61,6 +68,21 @@ namespace MerMail
                 pop_hostname = _pop_hostname;
                 pop_port = _pop_port;
                 pop_ssl = _pop_ssl;
+            }
+
+        }
+        public struct email
+        {
+            public string sender;
+            public string subject;
+            public string body;
+            public string date;
+            public email(string _sender, string _subject, string _body, string _date)
+            {
+                sender = _sender;
+                subject = _subject;
+                body = _body;
+                date = _date;
             }
 
         }
@@ -120,6 +142,20 @@ namespace MerMail
                 getIDCmd.Parameters.AddWithValue("@_mailaddress", mailaddr);
                 id = Convert.ToInt32(getIDCmd.ExecuteScalar());
             }
+    
+            
+            // Is used for making a name of the message database file for the user
+            string userMD5 = genMd5(mailaddr);
+
+            // set up SQLite connection for message database
+            SQLiteConnectionStringBuilder conStr = new SQLiteConnectionStringBuilder();
+            conStr.DataSource = appdata + "/mermail/userdata/"+ userMD5 + ".db";
+            conStr.Version = 3;
+            msgSqlCon = new SQLiteConnection(conStr.ConnectionString);
+            msgSqlCon.Open();
+            SQLiteCommand crCMD = new SQLiteCommand("CREATE TABLE IF NOT EXISTS messagetable (id CHAR(32) PRIMARY KEY NOT NULL,sender TEXT NOT NULL, subject TEXT, body TEXT, date DATETIME NOT NULL)", msgSqlCon);
+            crCMD.ExecuteNonQuery();
+
             return id;
         }
         public static List<mailaccount> getAccounts()
@@ -140,16 +176,77 @@ namespace MerMail
             return rtn;
 
         }
-        public static List<OpenPop.Mime.Message> FetchAllMessages()
+        private static string genMd5(string input)
         {
+            // MD5 part is copied from MSDN
+            MD5 hasher = MD5.Create();
+            byte[] data = hasher.ComputeHash(Encoding.Default.GetBytes(input));
+            StringBuilder sBuilder = new StringBuilder();
+            for (int i = 0; i < data.Length; i++)
+            {
+                sBuilder.Append(data[i].ToString("x2"));
+            }
+            return sBuilder.ToString();
+        }
+        public static List<email> FetchAllMessages()
+        {
+            // add messages to db
             int messageCount = popClient.GetMessageCount();
-
-            List<OpenPop.Mime.Message> allMessages = new List<OpenPop.Mime.Message>(messageCount);
 
             for (int i = messageCount; i > 0; i--)
             {
-                allMessages.Add(popClient.GetMessage(i));
+                OpenPop.Mime.Message msg = popClient.GetMessage(i);
+                string id = genMd5(string.Format("{0}_{1}_{2}_{3}", msg.Headers.From.MailAddress.Address, msg.Headers.DateSent.Ticks.ToString(), genMd5(msg.Headers.MessageId), msg.Headers.Subject));
+                string from = msg.Headers.From.MailAddress.Address;
+                string subject = msg.Headers.Subject;
+                string body = "";
+                switch (msg.MessagePart.ContentType.MediaType)
+                {
+                    default:
+                        body = msg.FindFirstPlainTextVersion().GetBodyAsText();
+                        break;
+                    case "multipart/alternative":
+                        body = msg.FindFirstHtmlVersion().GetBodyAsText();
+                        break;
+                }
+                // select strftime('%s','now');
+                // YYYY-MM-DD HH:MM:SS;
+                DateTime sent_o = msg.Headers.DateSent;
+                string sent = string.Format("{0:d4}-{1:d2}-{2:d2} {3:d2}:{4:d2}:{5:d2}", sent_o.Year, sent_o.Month, sent_o.Day, sent_o.Hour, sent_o.Minute, sent_o.Second);
+                //MessageBox.Show(sent);
+
+                SQLiteCommand crCMD = new SQLiteCommand("INSERT OR IGNORE INTO messagetable (id,sender,subject,body,date) VALUES (@_id,@_sender,@_subject,@_body,datetime(strftime('%Y-%m-%d %H:%M:%S',@_sent)))", msgSqlCon);
+
+                crCMD.Parameters.AddWithValue("@_id", id);
+                crCMD.Parameters.AddWithValue("@_sender", from);
+                crCMD.Parameters.AddWithValue("@_subject", subject);
+                crCMD.Parameters.AddWithValue("@_body", body);
+                crCMD.Parameters.AddWithValue("@_sent", sent);
+
+                crCMD.ExecuteNonQuery();
+
+                //sent.
+                //System.Net.Mail.MailAddress
+                
+                //allMessages.Add(msg);
             }
+
+            // get from database
+            List<email> allMessages = new List<email>();
+
+            SQLiteCommand cmd = new SQLiteCommand("SELECT sender,subject,body,date FROM messagetable", msgSqlCon);
+            SQLiteDataAdapter sqladapt = new SQLiteDataAdapter(cmd);
+            System.Data.DataSet sqlset = new System.Data.DataSet();
+            System.Data.DataTable tbl = new System.Data.DataTable();
+            sqladapt.Fill(tbl);
+            
+            foreach (System.Data.DataRow row in tbl.Rows)
+            {
+                //mailaccount tmp = new mailaccount(Convert.ToInt16(row.ItemArray[0]), Convert.ToString(row.ItemArray[1]), Convert.ToString(row.ItemArray[2]), Convert.ToString(row.ItemArray[3]), Convert.ToInt16(row.ItemArray[4]), Convert.ToBoolean(row.ItemArray[5]));
+                email tmp = new email(Convert.ToString(row.ItemArray[0]), Convert.ToString(row.ItemArray[1]), Convert.ToString(row.ItemArray[2]), Convert.ToString(row.ItemArray[3]));
+                allMessages.Add(tmp);
+            }
+
             return allMessages;
         }
         public static bool AuthenticateLog(string Hostname, int port, bool usessl, string username, string password)

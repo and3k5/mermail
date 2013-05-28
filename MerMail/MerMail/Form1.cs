@@ -18,7 +18,7 @@ namespace MerMail
             MerMail.Program.login();
         }
 
-        List<OpenPop.Mime.Message> result;
+        List<MerMail.Program.email> result;
         private void Form1_Load(object sender, EventArgs e)
         {
             try
@@ -26,11 +26,12 @@ namespace MerMail
                 if (MerMail.Program.popauth)
                 {
                     mailBox.Items.Clear();
+                    result = new List<MerMail.Program.email>();
                     result = MerMail.Program.FetchAllMessages();
                     // List subjects in listbox
-                    foreach (OpenPop.Mime.Message mail in result)
+                    foreach (MerMail.Program.email mail in result)
                     {
-                        mailBox.Items.Add(mail.Headers.Subject);
+                        mailBox.Items.Add(mail.subject);
                     }
                 }
             }
@@ -42,13 +43,16 @@ namespace MerMail
 
         private void mailBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            OpenPop.Mime.Message currentMail = result.ToArray()[mailBox.SelectedIndex];
+            MerMail.Program.email currentMail = result.ToArray()[mailBox.SelectedIndex];
             // Goodmorning IE
             webBrowser1.Navigate("about:blank");
             HtmlDocument document = webBrowser1.Document;
             document.Write(String.Empty);
+            webBrowser1.DocumentText = currentMail.body;
+            label_from.Text = currentMail.sender;
+            label_subject.Text = currentMail.subject;
             // Is MediaType multipart or not?
-            switch (currentMail.MessagePart.ContentType.MediaType)
+            /*switch (currentMail.MessagePart.ContentType.MediaType)
             {
                 default:
                     webBrowser1.DocumentText = currentMail.FindFirstPlainTextVersion().GetBodyAsText();
@@ -56,7 +60,7 @@ namespace MerMail
                 case "multipart/alternative":
                     webBrowser1.DocumentText = currentMail.FindFirstHtmlVersion().GetBodyAsText();
                     break;
-            }
+            }*/
         }
 
     }

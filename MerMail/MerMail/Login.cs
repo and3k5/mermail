@@ -33,9 +33,9 @@ namespace MerMail
             try
             {
                 bool auth = MerMail.Program.AuthenticateLog(HostNameBox.Text, Convert.ToInt32(PortBox.Text), useSslCheckbox.Checked, UserBox.Text, PassBox.Text);
-                MerMail.Program.insertUser(UserBox.Text, PassBox.Text, HostNameBox.Text, Convert.ToInt16(PortBox.Text), useSslCheckbox.Checked);
                 if (auth)
                 {
+                    MerMail.Program.insertUser(UserBox.Text, PassBox.Text, HostNameBox.Text, Convert.ToInt16(PortBox.Text), useSslCheckbox.Checked);
                     this.DialogResult = DialogResult.OK;
                 }
                 else
