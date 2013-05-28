@@ -29,7 +29,6 @@ namespace MerMail
 
         public static bool popauth;
         private static OpenPop.Pop3.Pop3Client popClient = new OpenPop.Pop3.Pop3Client();
-        private static SmtpClient smtpClient;
         public readonly static string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         private static SQLiteConnection sqlCon; // used for user database
         private static SQLiteConnection msgSqlCon; // used for storing emails 
@@ -251,19 +250,21 @@ namespace MerMail
 
         public static void SendMail(string to,string subject,string body)
         {
-            smtpClient = new SmtpClient(currentUser.smtp_hostname);
-            MailMessage mail = new MailMessage();
+            using (SmtpClient smtpClient = new SmtpClient(currentUser.smtp_hostname))
+            {
+                MailMessage mail = new MailMessage();
 
-            mail.From = new MailAddress(currentUser.mailaddress);
-            mail.To.Add(to);
-            mail.Subject = subject;
-            mail.Body = body;
+                mail.From = new MailAddress(currentUser.mailaddress);
+                mail.To.Add(to);
+                mail.Subject = subject;
+                mail.Body = body;
 
-            smtpClient.Port = currentUser.smtp_port;
-            smtpClient.Credentials = new System.Net.NetworkCredential(currentUser.mailaddress, currentUser.password);
-            smtpClient.EnableSsl = currentUser.smtp_ssl;
+                smtpClient.Port = currentUser.smtp_port;
+                smtpClient.Credentials = new System.Net.NetworkCredential(currentUser.mailaddress, currentUser.password);
+                smtpClient.EnableSsl = currentUser.smtp_ssl;
 
-            smtpClient.Send(mail);
+                smtpClient.Send(mail);
+            }
         }
 
 
