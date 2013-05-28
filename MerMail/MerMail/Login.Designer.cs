@@ -43,11 +43,12 @@
             this.SmtpPort = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.usesmtpssl = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // loginBtn
             // 
-            this.loginBtn.Location = new System.Drawing.Point(86, 212);
+            this.loginBtn.Location = new System.Drawing.Point(118, 212);
             this.loginBtn.Name = "loginBtn";
             this.loginBtn.Size = new System.Drawing.Size(89, 25);
             this.loginBtn.TabIndex = 10;
@@ -57,41 +58,41 @@
             // 
             // PassBox
             // 
-            this.PassBox.Location = new System.Drawing.Point(75, 159);
+            this.PassBox.Location = new System.Drawing.Point(106, 159);
             this.PassBox.Name = "PassBox";
             this.PassBox.PasswordChar = '*';
-            this.PassBox.Size = new System.Drawing.Size(100, 20);
+            this.PassBox.Size = new System.Drawing.Size(101, 20);
             this.PassBox.TabIndex = 9;
             // 
             // UserBox
             // 
-            this.UserBox.Location = new System.Drawing.Point(75, 133);
+            this.UserBox.Location = new System.Drawing.Point(106, 133);
             this.UserBox.Name = "UserBox";
-            this.UserBox.Size = new System.Drawing.Size(100, 20);
+            this.UserBox.Size = new System.Drawing.Size(101, 20);
             this.UserBox.TabIndex = 8;
             // 
             // useSslCheckbox
             // 
             this.useSslCheckbox.AutoSize = true;
-            this.useSslCheckbox.Location = new System.Drawing.Point(75, 110);
+            this.useSslCheckbox.Location = new System.Drawing.Point(137, 110);
             this.useSslCheckbox.Name = "useSslCheckbox";
-            this.useSslCheckbox.Size = new System.Drawing.Size(68, 17);
+            this.useSslCheckbox.Size = new System.Drawing.Size(62, 17);
             this.useSslCheckbox.TabIndex = 13;
-            this.useSslCheckbox.Text = "Use SSL";
+            this.useSslCheckbox.Text = "Pop Ssl";
             this.useSslCheckbox.UseVisualStyleBackColor = true;
             // 
             // PortBox
             // 
-            this.PortBox.Location = new System.Drawing.Point(75, 32);
+            this.PortBox.Location = new System.Drawing.Point(106, 32);
             this.PortBox.Name = "PortBox";
-            this.PortBox.Size = new System.Drawing.Size(100, 20);
+            this.PortBox.Size = new System.Drawing.Size(103, 20);
             this.PortBox.TabIndex = 12;
             // 
             // HostNameBox
             // 
-            this.HostNameBox.Location = new System.Drawing.Point(75, 6);
+            this.HostNameBox.Location = new System.Drawing.Point(106, 6);
             this.HostNameBox.Name = "HostNameBox";
-            this.HostNameBox.Size = new System.Drawing.Size(100, 20);
+            this.HostNameBox.Size = new System.Drawing.Size(103, 20);
             this.HostNameBox.TabIndex = 11;
             // 
             // label1
@@ -99,23 +100,23 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(60, 13);
+            this.label1.Size = new System.Drawing.Size(88, 13);
             this.label1.TabIndex = 14;
-            this.label1.Text = "HostName:";
+            this.label1.Text = "Pop3 HostName:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(24, 32);
+            this.label2.Location = new System.Drawing.Point(12, 32);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(48, 13);
+            this.label2.Size = new System.Drawing.Size(57, 13);
             this.label2.TabIndex = 15;
-            this.label2.Text = "Port NR:";
+            this.label2.Text = "Pop3 Port:";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 136);
+            this.label4.Location = new System.Drawing.Point(16, 136);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(60, 13);
             this.label4.TabIndex = 17;
@@ -124,7 +125,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 162);
+            this.label5.Location = new System.Drawing.Point(16, 159);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(56, 13);
             this.label5.TabIndex = 18;
@@ -133,30 +134,30 @@
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(54, 185);
+            this.comboBox1.Location = new System.Drawing.Point(19, 185);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.Size = new System.Drawing.Size(188, 21);
             this.comboBox1.TabIndex = 19;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // SmtpName
             // 
-            this.SmtpName.Location = new System.Drawing.Point(75, 58);
+            this.SmtpName.Location = new System.Drawing.Point(106, 58);
             this.SmtpName.Name = "SmtpName";
-            this.SmtpName.Size = new System.Drawing.Size(100, 20);
+            this.SmtpName.Size = new System.Drawing.Size(103, 20);
             this.SmtpName.TabIndex = 20;
             // 
             // SmtpPort
             // 
-            this.SmtpPort.Location = new System.Drawing.Point(75, 84);
+            this.SmtpPort.Location = new System.Drawing.Point(106, 84);
             this.SmtpPort.Name = "SmtpPort";
-            this.SmtpPort.Size = new System.Drawing.Size(100, 20);
+            this.SmtpPort.Size = new System.Drawing.Size(103, 20);
             this.SmtpPort.TabIndex = 21;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(9, 58);
+            this.label3.Location = new System.Drawing.Point(12, 61);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(63, 13);
             this.label3.TabIndex = 22;
@@ -165,17 +166,28 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(16, 84);
+            this.label6.Location = new System.Drawing.Point(12, 84);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(56, 13);
             this.label6.TabIndex = 23;
             this.label6.Text = "Smtp Port:";
             // 
+            // usesmtpssl
+            // 
+            this.usesmtpssl.AutoSize = true;
+            this.usesmtpssl.Location = new System.Drawing.Point(64, 110);
+            this.usesmtpssl.Name = "usesmtpssl";
+            this.usesmtpssl.Size = new System.Drawing.Size(67, 17);
+            this.usesmtpssl.TabIndex = 24;
+            this.usesmtpssl.Text = "Smtp Ssl";
+            this.usesmtpssl.UseVisualStyleBackColor = true;
+            // 
             // Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(185, 241);
+            this.ClientSize = new System.Drawing.Size(221, 247);
+            this.Controls.Add(this.usesmtpssl);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.SmtpPort);
@@ -217,6 +229,7 @@
         private System.Windows.Forms.TextBox SmtpPort;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.CheckBox usesmtpssl;
 
     }
 }
