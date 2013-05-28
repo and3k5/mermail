@@ -144,6 +144,10 @@ namespace MerMail
         private static string genMd5(string input)
         {
             // MD5 part is copied from MSDN
+            if (input == null)
+            {
+                input = "";
+            }
             MD5 hasher = MD5.Create();
             byte[] data = hasher.ComputeHash(Encoding.Default.GetBytes(input));
             StringBuilder sBuilder = new StringBuilder();
