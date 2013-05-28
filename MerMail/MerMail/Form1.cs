@@ -14,8 +14,8 @@ namespace MerMail
     {
         public Form1()
         {
-            InitializeComponent();
             MerMail.Program.login();
+            InitializeComponent();
         }
 
         List<MerMail.Program.email> result;
@@ -61,6 +61,11 @@ namespace MerMail
                     webBrowser1.DocumentText = currentMail.FindFirstHtmlVersion().GetBodyAsText();
                     break;
             }*/
+        }
+
+        private void logoutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
 
     }

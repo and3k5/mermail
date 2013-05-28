@@ -287,6 +287,7 @@ namespace MerMail
         {
             Login flogin = new Login();
             DialogResult res = flogin.ShowDialog();
+            //DialogResult Cancel = DialogResult.Cancel;
             if (res == DialogResult.OK && popauth == true)
             {
                 flogin.Close();
@@ -299,6 +300,16 @@ namespace MerMail
             {
 
             }
+            else if (res == DialogResult.Cancel)
+            {
+                Application.Exit();
+            }
+            MessageBox.Show(res.ToString());
+        }
+
+        public static void logout()
+        {
+            
         }
     }
 }
