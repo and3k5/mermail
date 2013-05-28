@@ -43,7 +43,8 @@ namespace MerMail
             conStr.Version = 3;
             sqlCon = new SQLiteConnection(conStr.ConnectionString);
             sqlCon.Open();
-            SQLiteCommand cmd = new SQLiteCommand("CREATE TABLE IF NOT EXISTS users ( id INTEGER PRIMARY KEY AUTOINCREMENT, mailaddress VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, pop_hostname VARCHAR(255) not null, pop_port INTEGER not null, pop_ssl BOOLEAN not null )", sqlCon);
+
+            SQLiteCommand cmd = new SQLiteCommand("CREATE TABLE IF NOT EXISTS users (mailaddress VARCHAR(255) PRIMARY KEY NOT NULL, password VARCHAR(255) NOT NULL, pop_hostname VARCHAR(255) not null, pop_port INTEGER not null, pop_ssl BOOLEAN not null )", sqlCon);
             cmd.ExecuteNonQuery();
 
             // msgSqlCon
@@ -54,15 +55,13 @@ namespace MerMail
         }
         public struct mailaccount
         {
-            public int id;
             public string mailaddress;
             public string password;
             public string pop_hostname;
             public int pop_port;
             public bool pop_ssl;
-            public mailaccount(int _id, string _mailaddress, string _password, string _pop_hostname, int _pop_port, bool _pop_ssl)
+            public mailaccount(string _mailaddress, string _password, string _pop_hostname, int _pop_port, bool _pop_ssl)
             {
-                id = _id;
                 mailaddress = _mailaddress;
                 password = _password;
                 pop_hostname = _pop_hostname;
@@ -88,62 +87,17 @@ namespace MerMail
         }
         public static int insertUser(string mailaddr, string password, string pop_hostname, int pop_port, bool pop_ssl)
         {
-            string countQuery = "SELECT COUNT(*) FROM users WHERE mailaddress=@_mailaddress";
-            SQLiteCommand countCmd = sqlCon.CreateCommand();
-            countCmd.CommandText = countQuery;
-            countCmd.Parameters.AddWithValue("@_mailaddress", mailaddr);
-            int count = Convert.ToInt32(countCmd.ExecuteScalar());
-            int id;
-            if (count == 0)
-            {
+            // Insert user to the table if it doesn't exist
+            string insertQuery = "INSERT OR IGNORE INTO users (mailaddress,password,pop_hostname,pop_port,pop_ssl) ";
+            insertQuery += "VALUES (@_mailaddress,@_password,@_pop_hostname,@_pop_port,@_pop_ssl)";
+            SQLiteCommand insertCmd = new SQLiteCommand(insertQuery, sqlCon);
+            insertCmd.Parameters.AddWithValue("@_mailaddress", mailaddr);
+            insertCmd.Parameters.AddWithValue("@_password", password);
+            insertCmd.Parameters.AddWithValue("@_pop_hostname", pop_hostname);
+            insertCmd.Parameters.AddWithValue("@_pop_port", pop_port);
+            insertCmd.Parameters.AddWithValue("@_pop_ssl", Convert.ToInt16(pop_ssl));
+            insertCmd.ExecuteNonQuery();
 
-                string sqlquery = "INSERT INTO users (mailaddress,password,pop_hostname,pop_port,pop_ssl) ";
-                sqlquery += "VALUES (@_mailaddress,@_password,@_pop_hostname,@_pop_port,@_pop_ssl)";
-
-                SQLiteCommand cmd = sqlCon.CreateCommand();
-                cmd.CommandText = sqlquery;
-                cmd.Parameters.AddWithValue("@_mailaddress", mailaddr);
-                cmd.Parameters.AddWithValue("@_password", password);
-                cmd.Parameters.AddWithValue("@_pop_hostname", pop_hostname);
-                cmd.Parameters.AddWithValue("@_pop_port", pop_port);
-                int popSSL = 0;
-                if (pop_ssl == true) popSSL = 1;
-
-                cmd.Parameters.AddWithValue("@_pop_ssl", popSSL);
-
-                int rtn = cmd.ExecuteNonQuery();
-
-                string getIDQuery = "select last_insert_rowid()";
-                SQLiteCommand getIDCmd = sqlCon.CreateCommand();
-                getIDCmd.CommandText = getIDQuery;
-                id = Convert.ToInt32(getIDCmd.ExecuteScalar());
-            }
-            else
-            {
-                string sqlquery = "UPDATE users SET mailaddress=@_mailaddress,password=@_password,pop_hostname=@_pop_hostname,pop_port=@_pop_port,pop_ssl=@_pop_ssl ";
-                sqlquery += "WHERE mailaddress=@_mailaddress";
-
-                SQLiteCommand cmd = sqlCon.CreateCommand();
-                cmd.CommandText = sqlquery;
-                cmd.Parameters.AddWithValue("@_mailaddress", mailaddr);
-                cmd.Parameters.AddWithValue("@_password", password);
-                cmd.Parameters.AddWithValue("@_pop_hostname", pop_hostname);
-                cmd.Parameters.AddWithValue("@_pop_port", pop_port);
-                int popSSL = 0;
-                if (pop_ssl == true) popSSL = 1;
-
-                cmd.Parameters.AddWithValue("@_pop_ssl", popSSL);
-
-                int rtn = cmd.ExecuteNonQuery();
-
-                string getIDQuery = "SELECT id FROM users WHERE mailaddress=@_mailaddress";
-                SQLiteCommand getIDCmd = sqlCon.CreateCommand();
-                getIDCmd.CommandText = getIDQuery;
-                getIDCmd.Parameters.AddWithValue("@_mailaddress", mailaddr);
-                id = Convert.ToInt32(getIDCmd.ExecuteScalar());
-            }
-    
-            
             // Is used for making a name of the message database file for the user
             string userMD5 = genMd5(mailaddr);
 
@@ -155,14 +109,12 @@ namespace MerMail
             msgSqlCon.Open();
             SQLiteCommand crCMD = new SQLiteCommand("CREATE TABLE IF NOT EXISTS messagetable (id CHAR(32) PRIMARY KEY NOT NULL,sender TEXT NOT NULL, subject TEXT, body TEXT, date DATETIME NOT NULL)", msgSqlCon);
             crCMD.ExecuteNonQuery();
-
-            return id;
+            
+            return 0;
         }
         public static List<mailaccount> getAccounts()
         {
-            string sqlquery = "SELECT * FROM users";
-            SQLiteCommand cmd = sqlCon.CreateCommand();
-            cmd.CommandText = sqlquery;
+            SQLiteCommand cmd = new SQLiteCommand("SELECT * FROM users", sqlCon);
             SQLiteDataAdapter sqladapt = new SQLiteDataAdapter(cmd);
             System.Data.DataSet sqlset = new System.Data.DataSet();
             System.Data.DataTable tbl = new System.Data.DataTable();
@@ -170,7 +122,7 @@ namespace MerMail
             List<mailaccount> rtn = new List<mailaccount>();
             foreach (System.Data.DataRow row in tbl.Rows)
             {
-                mailaccount tmp = new mailaccount(Convert.ToInt16(row.ItemArray[0]), Convert.ToString(row.ItemArray[1]), Convert.ToString(row.ItemArray[2]), Convert.ToString(row.ItemArray[3]), Convert.ToInt16(row.ItemArray[4]), Convert.ToBoolean(row.ItemArray[5]));
+                mailaccount tmp = new mailaccount(Convert.ToString(row.ItemArray[0]), Convert.ToString(row.ItemArray[1]), Convert.ToString(row.ItemArray[2]), Convert.ToInt16(row.ItemArray[3]), Convert.ToBoolean(row.ItemArray[4]));
                 rtn.Add(tmp);
             }
             return rtn;
