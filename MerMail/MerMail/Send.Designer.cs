@@ -99,6 +99,7 @@
             this.Controls.Add(this.TB);
             this.Name = "Send";
             this.Text = "Send";
+            this.Load += new System.EventHandler(this.Send_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
