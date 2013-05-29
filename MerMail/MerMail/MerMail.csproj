@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="asymmetric.cs" />
     <Compile Include="decryptForm.cs">
       <SubType>Form</SubType>
     </Compile>

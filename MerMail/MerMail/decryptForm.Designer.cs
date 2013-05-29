@@ -86,6 +86,7 @@
             this.button1.TabIndex = 5;
             this.button1.Text = "Load key from file";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // radioButton2
             // 
@@ -121,6 +122,7 @@
             this.Controls.Add(this.checkBox1);
             this.Name = "decryptForm";
             this.Text = "decryptForm";
+            this.Load += new System.EventHandler(this.decryptForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
