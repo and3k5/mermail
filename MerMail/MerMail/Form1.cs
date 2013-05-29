@@ -134,5 +134,11 @@ namespace MerMail
             newsend.ShowDialog();
         }
 
+        private void currentMailToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            decryptForm decForm = new decryptForm();
+            decForm.ShowDialog();
+        }
+
     }
 }

@@ -72,7 +72,7 @@ namespace MerMail
             return data;
 
         }
-        public static void generateNewKeys(int bitstrength)
+        public static void generateKeys(int bitstrength)
         {
             RSACryptoServiceProvider RSAProvider = new RSACryptoServiceProvider(bitstrength);
             string publicAndPrivateKeys = "<BitStrength>" + bitstrength.ToString() + "</BitStrength>" + RSAProvider.ToXmlString(true);

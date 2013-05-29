@@ -95,42 +95,42 @@ namespace MerMail
                 date = _date;
             }
         }
-        private static string generate_tdes_key() {
-            using (TripleDESCryptoServiceProvider tdes = new TripleDESCryptoServiceProvider()) {
-                tdes.GenerateKey();
-                return ASCIIEncoding.ASCII.GetString(tdes.Key);
-            }
-        }
-        private static string tdes_encrypt(string key, string rawdata)
-        {
-            TripleDESCryptoServiceProvider TDES = new TripleDESCryptoServiceProvider();
-            byte[] data = UTF8Encoding.UTF8.GetBytes(rawdata);
-            TDES.GenerateKey();
-            TDES.KeySize = 192;
-            TDES.Key = ASCIIEncoding.ASCII.GetBytes(key);
-            TDES.Mode = CipherMode.ECB;
-            TDES.Padding = PaddingMode.PKCS7;
-            ICryptoTransform cTransform = TDES.CreateEncryptor();
-            byte[] resultArray =
-              cTransform.TransformFinalBlock(data, 0,
-              data.Length);
-            TDES.Clear();
-            return Convert.ToBase64String(resultArray, 0, resultArray.Length);
-        }
-        private static string tdes_decrypt(string key, string crypteddata)
-        {
-            TripleDESCryptoServiceProvider TDES = new TripleDESCryptoServiceProvider();
-            byte[] data = Convert.FromBase64String(crypteddata);
-            TDES.KeySize = 192;
-            TDES.Key = ASCIIEncoding.ASCII.GetBytes(key);
-            TDES.Mode = CipherMode.ECB;
-            TDES.Padding = PaddingMode.PKCS7;
-            ICryptoTransform cTransform = TDES.CreateDecryptor();
-            byte[] resultArray = cTransform.TransformFinalBlock(
-                         data, 0, data.Length);
-            TDES.Clear();
-            return UTF8Encoding.UTF8.GetString(resultArray);
-        }
+        //private static string generate_tdes_key() {
+        //    using (TripleDESCryptoServiceProvider tdes = new TripleDESCryptoServiceProvider()) {
+        //        tdes.GenerateKey();
+        //        return ASCIIEncoding.ASCII.GetString(tdes.Key);
+        //    }
+        //}
+        //private static string tdes_encrypt(string key, string rawdata)
+        //{
+        //    TripleDESCryptoServiceProvider TDES = new TripleDESCryptoServiceProvider();
+        //    byte[] data = UTF8Encoding.UTF8.GetBytes(rawdata);
+        //    TDES.GenerateKey();
+        //    TDES.KeySize = 192;
+        //    TDES.Key = ASCIIEncoding.ASCII.GetBytes(key);
+        //    TDES.Mode = CipherMode.ECB;
+        //    TDES.Padding = PaddingMode.PKCS7;
+        //    ICryptoTransform cTransform = TDES.CreateEncryptor();
+        //    byte[] resultArray =
+        //      cTransform.TransformFinalBlock(data, 0,
+        //      data.Length);
+        //    TDES.Clear();
+        //    return Convert.ToBase64String(resultArray, 0, resultArray.Length);
+        //}
+        //private static string tdes_decrypt(string key, string crypteddata)
+        //{
+        //    TripleDESCryptoServiceProvider TDES = new TripleDESCryptoServiceProvider();
+        //    byte[] data = Convert.FromBase64String(crypteddata);
+        //    TDES.KeySize = 192;
+        //    TDES.Key = ASCIIEncoding.ASCII.GetBytes(key);
+        //    TDES.Mode = CipherMode.ECB;
+        //    TDES.Padding = PaddingMode.PKCS7;
+        //    ICryptoTransform cTransform = TDES.CreateDecryptor();
+        //    byte[] resultArray = cTransform.TransformFinalBlock(
+        //                 data, 0, data.Length);
+        //    TDES.Clear();
+        //    return UTF8Encoding.UTF8.GetString(resultArray);
+        //}
         public static int insertUser(string mailaddr, string password, string pop_hostname, int pop_port, bool pop_ssl, string smtp_hostname, int smtp_port, bool smtp_ssl)
         {
             // Now that we have encryption, we have to know if the user really exists.
@@ -164,7 +164,7 @@ namespace MerMail
             insertCmd.Parameters.AddWithValue("@_smtp_ssl", Convert.ToInt16(smtp_ssl));
             if (!userExist)
             {
-                user_key = generate_tdes_key();
+                user_key = MerMail.Symmetric.generateKey();
             }
             insertCmd.Parameters.AddWithValue("@_encryption_key", user_key);
             insertCmd.ExecuteNonQuery();
@@ -264,7 +264,7 @@ namespace MerMail
                 crCMD.Parameters.AddWithValue("@_id", id);
                 crCMD.Parameters.AddWithValue("@_sender", from);
                 crCMD.Parameters.AddWithValue("@_subject", subject);
-                crCMD.Parameters.AddWithValue("@_body", tdes_encrypt(currentUser.encryption_key,body));
+                crCMD.Parameters.AddWithValue("@_body", MerMail.Symmetric.EncryptString(currentUser.encryption_key,body));
                 crCMD.Parameters.AddWithValue("@_sent", sent);
 
                 crCMD.ExecuteNonQuery();
@@ -290,7 +290,7 @@ namespace MerMail
 
             foreach (System.Data.DataRow row in tbl.Rows)
             {
-                email tmp = new email(Convert.ToString(row.ItemArray[0]), Convert.ToString(row.ItemArray[1]), tdes_decrypt(currentUser.encryption_key,Convert.ToString(row.ItemArray[2])), Convert.ToString(row.ItemArray[3]));
+                email tmp = new email(Convert.ToString(row.ItemArray[0]), Convert.ToString(row.ItemArray[1]), MerMail.Symmetric.DecryptString(currentUser.encryption_key, Convert.ToString(row.ItemArray[2])), Convert.ToString(row.ItemArray[3]));
                 allMessages.Add(tmp);
             }
 

@@ -36,17 +36,17 @@
             this.label_subject = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.mailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateMailsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.sendMailToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.encryptionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.decryptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.currentMailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.encryptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newMailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.currentMailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -124,6 +124,67 @@
             this.logoutToolStripMenuItem.Text = "Logout";
             this.logoutToolStripMenuItem.Click += new System.EventHandler(this.logoutToolStripMenuItem_Click);
             // 
+            // mailsToolStripMenuItem
+            // 
+            this.mailsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.updateMailsToolStripMenuItem1,
+            this.sendMailToolStripMenuItem1});
+            this.mailsToolStripMenuItem.Name = "mailsToolStripMenuItem";
+            this.mailsToolStripMenuItem.Size = new System.Drawing.Size(42, 20);
+            this.mailsToolStripMenuItem.Text = "Mail";
+            // 
+            // updateMailsToolStripMenuItem1
+            // 
+            this.updateMailsToolStripMenuItem1.Name = "updateMailsToolStripMenuItem1";
+            this.updateMailsToolStripMenuItem1.Size = new System.Drawing.Size(143, 22);
+            this.updateMailsToolStripMenuItem1.Text = "Update mails";
+            this.updateMailsToolStripMenuItem1.Click += new System.EventHandler(this.updateMailsToolStripMenuItem1_Click);
+            // 
+            // sendMailToolStripMenuItem1
+            // 
+            this.sendMailToolStripMenuItem1.Name = "sendMailToolStripMenuItem1";
+            this.sendMailToolStripMenuItem1.Size = new System.Drawing.Size(143, 22);
+            this.sendMailToolStripMenuItem1.Text = "Send mail";
+            this.sendMailToolStripMenuItem1.Click += new System.EventHandler(this.sendMailToolStripMenuItem1_Click);
+            // 
+            // encryptionToolStripMenuItem
+            // 
+            this.encryptionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.decryptToolStripMenuItem,
+            this.encryptToolStripMenuItem});
+            this.encryptionToolStripMenuItem.Name = "encryptionToolStripMenuItem";
+            this.encryptionToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
+            this.encryptionToolStripMenuItem.Text = "Encryption";
+            // 
+            // decryptToolStripMenuItem
+            // 
+            this.decryptToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.currentMailToolStripMenuItem});
+            this.decryptToolStripMenuItem.Name = "decryptToolStripMenuItem";
+            this.decryptToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.decryptToolStripMenuItem.Text = "Decrypt";
+            // 
+            // currentMailToolStripMenuItem
+            // 
+            this.currentMailToolStripMenuItem.Name = "currentMailToolStripMenuItem";
+            this.currentMailToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.currentMailToolStripMenuItem.Text = "Current Mail";
+            this.currentMailToolStripMenuItem.Click += new System.EventHandler(this.currentMailToolStripMenuItem_Click);
+            // 
+            // encryptToolStripMenuItem
+            // 
+            this.encryptToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newMailToolStripMenuItem});
+            this.encryptToolStripMenuItem.Name = "encryptToolStripMenuItem";
+            this.encryptToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.encryptToolStripMenuItem.Text = "Encrypt";
+            // 
+            // newMailToolStripMenuItem
+            // 
+            this.newMailToolStripMenuItem.Name = "newMailToolStripMenuItem";
+            this.newMailToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.newMailToolStripMenuItem.Text = "New Mail";
+            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -147,66 +208,6 @@
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
-            // 
-            // mailsToolStripMenuItem
-            // 
-            this.mailsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.updateMailsToolStripMenuItem1,
-            this.sendMailToolStripMenuItem1});
-            this.mailsToolStripMenuItem.Name = "mailsToolStripMenuItem";
-            this.mailsToolStripMenuItem.Size = new System.Drawing.Size(42, 20);
-            this.mailsToolStripMenuItem.Text = "Mail";
-            // 
-            // updateMailsToolStripMenuItem1
-            // 
-            this.updateMailsToolStripMenuItem1.Name = "updateMailsToolStripMenuItem1";
-            this.updateMailsToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
-            this.updateMailsToolStripMenuItem1.Text = "Update mails";
-            this.updateMailsToolStripMenuItem1.Click += new System.EventHandler(this.updateMailsToolStripMenuItem1_Click);
-            // 
-            // sendMailToolStripMenuItem1
-            // 
-            this.sendMailToolStripMenuItem1.Name = "sendMailToolStripMenuItem1";
-            this.sendMailToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
-            this.sendMailToolStripMenuItem1.Text = "Send mail";
-            this.sendMailToolStripMenuItem1.Click += new System.EventHandler(this.sendMailToolStripMenuItem1_Click);
-            // 
-            // encryptionToolStripMenuItem
-            // 
-            this.encryptionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.decryptToolStripMenuItem,
-            this.encryptToolStripMenuItem});
-            this.encryptionToolStripMenuItem.Name = "encryptionToolStripMenuItem";
-            this.encryptionToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
-            this.encryptionToolStripMenuItem.Text = "Encryption";
-            // 
-            // decryptToolStripMenuItem
-            // 
-            this.decryptToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.currentMailToolStripMenuItem});
-            this.decryptToolStripMenuItem.Name = "decryptToolStripMenuItem";
-            this.decryptToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.decryptToolStripMenuItem.Text = "Decrypt";
-            // 
-            // encryptToolStripMenuItem
-            // 
-            this.encryptToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newMailToolStripMenuItem});
-            this.encryptToolStripMenuItem.Name = "encryptToolStripMenuItem";
-            this.encryptToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.encryptToolStripMenuItem.Text = "Encrypt";
-            // 
-            // newMailToolStripMenuItem
-            // 
-            this.newMailToolStripMenuItem.Name = "newMailToolStripMenuItem";
-            this.newMailToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.newMailToolStripMenuItem.Text = "New Mail";
-            // 
-            // currentMailToolStripMenuItem
-            // 
-            this.currentMailToolStripMenuItem.Name = "currentMailToolStripMenuItem";
-            this.currentMailToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.currentMailToolStripMenuItem.Text = "Current Mail";
             // 
             // Form1
             // 
