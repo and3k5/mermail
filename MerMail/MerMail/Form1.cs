@@ -15,7 +15,7 @@ namespace MerMail
         public Form1()
         {
             InitializeComponent();
-
+            timer();
             // Worker from POP3 to SQLite
             sqlMailworker = new BackgroundWorker();
 
@@ -88,6 +88,21 @@ namespace MerMail
             {
                 MessageBox.Show("Der skete en fejl..." + err.Message);
             }
+        }
+
+        static Timer RMT = new Timer();
+        public void timer()
+        {
+            RMT.Tick += new EventHandler(TimerEvent);
+            RMT.Interval = 300000;
+            RMT.Start();
+        }
+
+        private void TimerEvent(object myobj, EventArgs timereventargs)
+        {
+            RMT.Stop();
+            GetMailsFromServer(); 
+            RMT.Enabled = true;
         }
 
         private void mailBox_SelectedIndexChanged(object sender, EventArgs e)
