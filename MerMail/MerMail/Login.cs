@@ -12,9 +12,39 @@ namespace MerMail
 {
     public partial class Login : Form
     {
+        ToolTip PopHostNTP = new ToolTip();
+        ToolTip PopPortTP = new ToolTip();
+        ToolTip PopSSLTP = new ToolTip();
+        ToolTip SmtpHostNTP = new ToolTip();
+        ToolTip SmtpPortTP = new ToolTip();
+        ToolTip SmtpSSLTP = new ToolTip();
+        ToolTip UserTP = new ToolTip();
+        ToolTip PassTP = new ToolTip();
+        ToolTip ComboTP = new ToolTip();
+        ToolTip loginbtnTP = new ToolTip();
         public Login()
         {
             InitializeComponent();
+            PopHostNTP.ShowAlways = true;
+            PopPortTP.ShowAlways = true;
+            PopSSLTP.ShowAlways = true;
+            SmtpHostNTP.ShowAlways = true;
+            SmtpPortTP.ShowAlways = true;
+            SmtpSSLTP.ShowAlways = true;
+            UserTP.ShowAlways = true;
+            PassTP.ShowAlways = true;
+            ComboTP.ShowAlways = true;
+            loginbtnTP.ShowAlways = true;
+            PopHostNTP.SetToolTip(HostNameBox,"POP servername");
+            PopPortTP.SetToolTip(PortBox, "POP Port NR");
+            PopSSLTP.SetToolTip(useSslCheckbox, "Use POP SSL?");
+            SmtpHostNTP.SetToolTip(SmtpName, "SMTP servername");
+            SmtpPortTP.SetToolTip(SmtpPort, "SMTP port");
+            SmtpSSLTP.SetToolTip(usesmtpssl, "Use SMTP SSL?");
+            UserTP.SetToolTip(UserBox, "Email or username to the POP- and SMTP-server");
+            PassTP.SetToolTip(PassBox, "Password");
+            ComboTP.SetToolTip(comboBox1, "Previus users on this pc");
+            loginbtnTP.SetToolTip(loginBtn, "Login");
         }
         private List<MerMail.Program.mailaccount> accounts;
         private void Login_Load(object sender, EventArgs e)

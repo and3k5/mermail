@@ -15,7 +15,6 @@ namespace MerMail
         public Form1()
         {
             InitializeComponent();
-            timer();
             // Worker from POP3 to SQLite
             sqlMailworker = new BackgroundWorker();
 
@@ -77,6 +76,7 @@ namespace MerMail
         {
             this.BringToFront();
             MerMail.Program.login();
+            timer();
             try
             {
                 if (MerMail.Program.popauth)
