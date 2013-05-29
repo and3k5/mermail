@@ -11,7 +11,7 @@ using System.Xml;
 
 namespace MerMail
 {
-    class Asymmetric
+    public class Asymmetric
     {
         public struct Key
         {

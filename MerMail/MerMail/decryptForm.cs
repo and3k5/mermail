@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MerMail;
 
 namespace MerMail
 {
@@ -17,15 +18,19 @@ namespace MerMail
             InitializeComponent();
 
         }
-        //public MerMail.
+        
+        public string SymmetricKey;
+        public Asymmetric.Key private_key;
+
+
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            groupBox1.Enabled = checkBox1.Checked;
+            groupSymmetric.Enabled = useSymmetric.Checked;
         }
 
         private void decryptForm_Load(object sender, EventArgs e)
         {
-            groupBox1.Enabled = checkBox1.Checked;
+            groupSymmetric.Enabled = useSymmetric.Checked;
         }
 
         private void button1_Click(object sender, EventArgs e)

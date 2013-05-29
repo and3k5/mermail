@@ -137,7 +137,11 @@ namespace MerMail
         private void currentMailToolStripMenuItem_Click(object sender, EventArgs e)
         {
             decryptForm decForm = new decryptForm();
-            decForm.ShowDialog();
+            if (decForm.ShowDialog() == DialogResult.OK)
+            {
+                //decForm.private_key
+                //decForm.private
+            }
         }
 
     }
