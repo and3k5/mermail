@@ -8,6 +8,7 @@ using System.Data.SQLite;
 using System.Security.Cryptography;
 using System.Text;
 using System.Net.Mail;
+using System.ComponentModel;
 
 
 namespace MerMail
@@ -46,7 +47,6 @@ namespace MerMail
             sqlCon = new SQLiteConnection(conStr.ConnectionString);
             sqlCon.Open();
 
-            //SQLiteCommand cmd = new SQLiteCommand("CREATE TABLE IF NOT EXISTS users (mailaddress VARCHAR(255) PRIMARY KEY NOT NULL, password VARCHAR(255) NOT NULL, pop_hostname VARCHAR(255) not null, pop_port INTEGER not null, pop_ssl BOOLEAN not null )", sqlCon);
             SQLiteCommand cmd = new SQLiteCommand("CREATE TABLE IF NOT EXISTS users (mailaddress VARCHAR(255) PRIMARY KEY NOT NULL, password VARCHAR(255) NOT NULL, pop_hostname VARCHAR(255) not null, pop_port INTEGER not null, pop_ssl BOOLEAN not null,smtp_hostname VARCHAR(255) not null, smtp_port INTEGER not null,smtp_ssl BOOLEAN not null)", sqlCon);
             cmd.ExecuteNonQuery();
 
@@ -157,10 +157,28 @@ namespace MerMail
             }
             return sBuilder.ToString();
         }
-        public static List<email> FetchAllMessages()
+        public static void FetchAllMessages(object sender, DoWorkEventArgs e)
         {
+            
             // add messages to db
+            try
+            {
+                // Makes a new POP3 session
+                // POP3 does not allow to check for new mails
+                // * facepalm *
+                popClient.Disconnect();
+                popClient.Connect(currentUser.pop_hostname, currentUser.pop_port, currentUser.pop_ssl);
+                popClient.Authenticate(currentUser.mailaddress, currentUser.password);
+            }
+            catch (SystemException err)
+            {
+                MessageBox.Show("Kunne ikke genoprette en forbindelse"+Environment.NewLine+err.Message);
+            }
+            
             int messageCount = popClient.GetMessageCount();
+
+            int progress = 0;
+            int lastProgress = 0;
 
             for (int i = messageCount; i > 0; i--)
             {
@@ -178,11 +196,8 @@ namespace MerMail
                         body = msg.FindFirstHtmlVersion().GetBodyAsText();
                         break;
                 }
-                // select strftime('%s','now');
-                // YYYY-MM-DD HH:MM:SS;
                 DateTime sent_o = msg.Headers.DateSent;
                 string sent = string.Format("{0:d4}-{1:d2}-{2:d2} {3:d2}:{4:d2}:{5:d2}", sent_o.Year, sent_o.Month, sent_o.Day, sent_o.Hour, sent_o.Minute, sent_o.Second);
-                //MessageBox.Show(sent);
 
                 SQLiteCommand crCMD = new SQLiteCommand("INSERT OR IGNORE INTO messagetable (id,sender,subject,body,date) VALUES (@_id,@_sender,@_subject,@_body,datetime(strftime('%Y-%m-%d %H:%M:%S',@_sent)))", msgSqlCon);
 
@@ -194,12 +209,16 @@ namespace MerMail
 
                 crCMD.ExecuteNonQuery();
 
-                //sent.
-                //System.Net.Mail.MailAddress
-                
-                //allMessages.Add(msg);
+                progress = (i * 100) / (messageCount);
+                if (progress > lastProgress + 10)
+                {
+                    (sender as BackgroundWorker).ReportProgress(progress);
+                    lastProgress = progress;
+                }
             }
-
+        }
+        public static void ImportMails(object sender, DoWorkEventArgs e)
+        {
             // get from database
             List<email> allMessages = new List<email>();
 
@@ -208,15 +227,14 @@ namespace MerMail
             System.Data.DataSet sqlset = new System.Data.DataSet();
             System.Data.DataTable tbl = new System.Data.DataTable();
             sqladapt.Fill(tbl);
-            
+
             foreach (System.Data.DataRow row in tbl.Rows)
             {
-                //mailaccount tmp = new mailaccount(Convert.ToInt16(row.ItemArray[0]), Convert.ToString(row.ItemArray[1]), Convert.ToString(row.ItemArray[2]), Convert.ToString(row.ItemArray[3]), Convert.ToInt16(row.ItemArray[4]), Convert.ToBoolean(row.ItemArray[5]));
                 email tmp = new email(Convert.ToString(row.ItemArray[0]), Convert.ToString(row.ItemArray[1]), Convert.ToString(row.ItemArray[2]), Convert.ToString(row.ItemArray[3]));
                 allMessages.Add(tmp);
             }
 
-            return allMessages;
+            e.Result = allMessages;
         }
         public static bool AuthenticateLog(string Hostname, int port, bool usessl, string username, string password)
         {

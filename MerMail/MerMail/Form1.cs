@@ -15,9 +15,64 @@ namespace MerMail
         public Form1()
         {
             InitializeComponent();
+
+            // Worker from POP3 to SQLite
+            sqlMailworker = new BackgroundWorker();
+
+            sqlMailworker.WorkerReportsProgress = true;
+
+            sqlMailworker.DoWork += new DoWorkEventHandler(MerMail.Program.FetchAllMessages);
+            sqlMailworker.ProgressChanged += new ProgressChangedEventHandler(workerProgress);
+            sqlMailworker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(workerDone);
+
+            // Worker from SQLite to GUI
+            outputWorker = new BackgroundWorker();
+
+            outputWorker.DoWork += new DoWorkEventHandler(MerMail.Program.ImportMails);
+            outputWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(showMails);
+
         }
 
         List<MerMail.Program.email> result;
+        private BackgroundWorker sqlMailworker;
+        private BackgroundWorker outputWorker;
+        private void GetMailsFromServer()
+        {
+            if (!sqlMailworker.IsBusy)
+            {
+                toolStripStatusLabel1.Text = "Downloading mails..";
+                toolStripProgressBar1.Visible = true;
+                sqlMailworker.RunWorkerAsync();
+            }
+        }
+        private void getMailsFromSql()
+        {
+            if (!outputWorker.IsBusy)
+            {
+                outputWorker.RunWorkerAsync();
+            }
+        }
+        private void workerProgress(object sender, ProgressChangedEventArgs e)
+        {
+            toolStripProgressBar1.Value = e.ProgressPercentage;
+        }
+        private void showMails(object sender, RunWorkerCompletedEventArgs e)
+        {
+            result = (List<MerMail.Program.email>)e.Result;
+            mailBox.Items.Clear();
+            foreach (MerMail.Program.email mail in result)
+            {
+                mailBox.Items.Add(mail.subject);
+            }
+            toolStripStatusLabel1.Text = "Mails collected..";
+
+        }
+        private void workerDone(object sender, RunWorkerCompletedEventArgs e)
+        {
+            toolStripStatusLabel1.Text = "Downloading mails complete..";
+            toolStripProgressBar1.Visible = false;
+            getMailsFromSql();
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
             this.BringToFront();
@@ -26,14 +81,7 @@ namespace MerMail
             {
                 if (MerMail.Program.popauth)
                 {
-                    mailBox.Items.Clear();
-                    result = new List<MerMail.Program.email>();
-                    result = MerMail.Program.FetchAllMessages();
-                    // List subjects in listbox
-                    foreach (MerMail.Program.email mail in result)
-                    {
-                        mailBox.Items.Add(mail.subject);
-                    }
+                    GetMailsFromServer();
                 }
             }
             catch (Exception err)
@@ -44,6 +92,7 @@ namespace MerMail
 
         private void mailBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (mailBox.SelectedIndex == -1) return;
             MerMail.Program.email currentMail = result.ToArray()[mailBox.SelectedIndex];
             // Goodmorning IE
             webBrowser1.Navigate("about:blank");
@@ -52,16 +101,6 @@ namespace MerMail
             webBrowser1.DocumentText = currentMail.body;
             label_from.Text = currentMail.sender;
             label_subject.Text = currentMail.subject;
-            // Is MediaType multipart or not?
-            /*switch (currentMail.MessagePart.ContentType.MediaType)
-            {
-                default:
-                    webBrowser1.DocumentText = currentMail.FindFirstPlainTextVersion().GetBodyAsText();
-                    break;
-                case "multipart/alternative":
-                    webBrowser1.DocumentText = currentMail.FindFirstHtmlVersion().GetBodyAsText();
-                    break;
-            }*/
         }
 
         private void logoutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -73,6 +112,11 @@ namespace MerMail
         {
             Send newsend = new Send();
             newsend.ShowDialog();
+        }
+
+        private void updateMailsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GetMailsFromServer();   
         }
 
     }

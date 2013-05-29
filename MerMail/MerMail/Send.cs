@@ -20,6 +20,7 @@ namespace MerMail
         private void Sendbtn_Click(object sender, EventArgs e)
         {
             MerMail.Program.SendMail(TB.Text, Subjectbox.Text, BodyBox.Text);
+            this.Close();
         }
     }
 }
