@@ -35,12 +35,18 @@
             this.label_from = new System.Windows.Forms.Label();
             this.label_subject = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.sendMailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.updateMailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.updateMailsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.sendMailToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.encryptionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.decryptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.encryptToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newMailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.currentMailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -102,21 +108,14 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.sendMailToolStripMenuItem,
             this.logoutToolStripMenuItem,
-            this.updateMailsToolStripMenuItem});
+            this.mailsToolStripMenuItem,
+            this.encryptionToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(684, 24);
             this.menuStrip1.TabIndex = 12;
             this.menuStrip1.Text = "menuStrip1";
-            // 
-            // sendMailToolStripMenuItem
-            // 
-            this.sendMailToolStripMenuItem.Name = "sendMailToolStripMenuItem";
-            this.sendMailToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
-            this.sendMailToolStripMenuItem.Text = "Send Mail";
-            this.sendMailToolStripMenuItem.Click += new System.EventHandler(this.sendMailToolStripMenuItem_Click);
             // 
             // logoutToolStripMenuItem
             // 
@@ -149,12 +148,65 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
             // 
-            // updateMailsToolStripMenuItem
+            // mailsToolStripMenuItem
             // 
-            this.updateMailsToolStripMenuItem.Name = "updateMailsToolStripMenuItem";
-            this.updateMailsToolStripMenuItem.Size = new System.Drawing.Size(88, 20);
-            this.updateMailsToolStripMenuItem.Text = "Update mails";
-            this.updateMailsToolStripMenuItem.Click += new System.EventHandler(this.updateMailsToolStripMenuItem_Click);
+            this.mailsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.updateMailsToolStripMenuItem1,
+            this.sendMailToolStripMenuItem1});
+            this.mailsToolStripMenuItem.Name = "mailsToolStripMenuItem";
+            this.mailsToolStripMenuItem.Size = new System.Drawing.Size(42, 20);
+            this.mailsToolStripMenuItem.Text = "Mail";
+            // 
+            // updateMailsToolStripMenuItem1
+            // 
+            this.updateMailsToolStripMenuItem1.Name = "updateMailsToolStripMenuItem1";
+            this.updateMailsToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.updateMailsToolStripMenuItem1.Text = "Update mails";
+            this.updateMailsToolStripMenuItem1.Click += new System.EventHandler(this.updateMailsToolStripMenuItem1_Click);
+            // 
+            // sendMailToolStripMenuItem1
+            // 
+            this.sendMailToolStripMenuItem1.Name = "sendMailToolStripMenuItem1";
+            this.sendMailToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.sendMailToolStripMenuItem1.Text = "Send mail";
+            this.sendMailToolStripMenuItem1.Click += new System.EventHandler(this.sendMailToolStripMenuItem1_Click);
+            // 
+            // encryptionToolStripMenuItem
+            // 
+            this.encryptionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.decryptToolStripMenuItem,
+            this.encryptToolStripMenuItem});
+            this.encryptionToolStripMenuItem.Name = "encryptionToolStripMenuItem";
+            this.encryptionToolStripMenuItem.Size = new System.Drawing.Size(76, 20);
+            this.encryptionToolStripMenuItem.Text = "Encryption";
+            // 
+            // decryptToolStripMenuItem
+            // 
+            this.decryptToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.currentMailToolStripMenuItem});
+            this.decryptToolStripMenuItem.Name = "decryptToolStripMenuItem";
+            this.decryptToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.decryptToolStripMenuItem.Text = "Decrypt";
+            // 
+            // encryptToolStripMenuItem
+            // 
+            this.encryptToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newMailToolStripMenuItem});
+            this.encryptToolStripMenuItem.Name = "encryptToolStripMenuItem";
+            this.encryptToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.encryptToolStripMenuItem.Text = "Encrypt";
+            // 
+            // newMailToolStripMenuItem
+            // 
+            this.newMailToolStripMenuItem.Name = "newMailToolStripMenuItem";
+            this.newMailToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newMailToolStripMenuItem.Text = "New Mail";
+            // 
+            // currentMailToolStripMenuItem
+            // 
+            this.currentMailToolStripMenuItem.Name = "currentMailToolStripMenuItem";
+            this.currentMailToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.currentMailToolStripMenuItem.Text = "Current Mail";
             // 
             // Form1
             // 
@@ -191,12 +243,18 @@
         private System.Windows.Forms.Label label_from;
         private System.Windows.Forms.Label label_subject;
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem sendMailToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem logoutToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.ToolStripMenuItem updateMailsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mailsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem updateMailsToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem sendMailToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem encryptionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem decryptToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem currentMailToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem encryptToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newMailToolStripMenuItem;
     }
 }
 
