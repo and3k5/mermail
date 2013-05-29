@@ -47,7 +47,7 @@ namespace MerMail
             sqlCon = new SQLiteConnection(conStr.ConnectionString);
             sqlCon.Open();
 
-            SQLiteCommand cmd = new SQLiteCommand("CREATE TABLE IF NOT EXISTS users (mailaddress VARCHAR(255) PRIMARY KEY NOT NULL, password VARCHAR(255) NOT NULL, pop_hostname VARCHAR(255) not null, pop_port INTEGER not null, pop_ssl BOOLEAN not null,smtp_hostname VARCHAR(255) not null, smtp_port INTEGER not null,smtp_ssl BOOLEAN not null)", sqlCon);
+            SQLiteCommand cmd = new SQLiteCommand("CREATE TABLE IF NOT EXISTS users (mailaddress VARCHAR(255) PRIMARY KEY NOT NULL, password VARCHAR(255) NOT NULL, pop_hostname VARCHAR(255) not null, pop_port INTEGER not null, pop_ssl BOOLEAN not null,smtp_hostname VARCHAR(255) not null, smtp_port INTEGER not null,smtp_ssl BOOLEAN not null,encryption_key TEXT not null)", sqlCon);
             cmd.ExecuteNonQuery();
 
             // msgSqlCon
@@ -66,7 +66,8 @@ namespace MerMail
             public string smtp_hostname;
             public int smtp_port;
             public bool smtp_ssl;
-            public mailaccount(string _mailaddress, string _password, string _pop_hostname, int _pop_port, bool _pop_ssl, string _smtp_hostname, int _smtp_port, bool _smtp_ssl)
+            public string encryption_key;
+            public mailaccount(string _mailaddress, string _password, string _pop_hostname, int _pop_port, bool _pop_ssl, string _smtp_hostname, int _smtp_port, bool _smtp_ssl,string _encryption_key)
             {
                 mailaddress = _mailaddress;
                 password = _password;
@@ -76,6 +77,7 @@ namespace MerMail
                 smtp_hostname = _smtp_hostname;
                 smtp_port = _smtp_port;
                 smtp_ssl = _smtp_ssl;
+                encryption_key = _encryption_key;
             }
 
         }
@@ -93,11 +95,64 @@ namespace MerMail
                 date = _date;
             }
         }
+        private static string generate_tdes_key() {
+            using (TripleDESCryptoServiceProvider tdes = new TripleDESCryptoServiceProvider()) {
+                tdes.GenerateKey();
+                return ASCIIEncoding.ASCII.GetString(tdes.Key);
+            }
+        }
+        private static string tdes_encrypt(string key, string rawdata)
+        {
+            TripleDESCryptoServiceProvider TDES = new TripleDESCryptoServiceProvider();
+            byte[] data = UTF8Encoding.UTF8.GetBytes(rawdata);
+            TDES.GenerateKey();
+            TDES.KeySize = 192;
+            TDES.Key = ASCIIEncoding.ASCII.GetBytes(key);
+            TDES.Mode = CipherMode.ECB;
+            TDES.Padding = PaddingMode.PKCS7;
+            ICryptoTransform cTransform = TDES.CreateEncryptor();
+            byte[] resultArray =
+              cTransform.TransformFinalBlock(data, 0,
+              data.Length);
+            TDES.Clear();
+            return Convert.ToBase64String(resultArray, 0, resultArray.Length);
+        }
+        private static string tdes_decrypt(string key, string crypteddata)
+        {
+            TripleDESCryptoServiceProvider TDES = new TripleDESCryptoServiceProvider();
+            byte[] data = Convert.FromBase64String(crypteddata);
+            TDES.KeySize = 192;
+            TDES.Key = ASCIIEncoding.ASCII.GetBytes(key);
+            TDES.Mode = CipherMode.ECB;
+            TDES.Padding = PaddingMode.PKCS7;
+            ICryptoTransform cTransform = TDES.CreateDecryptor();
+            byte[] resultArray = cTransform.TransformFinalBlock(
+                         data, 0, data.Length);
+            TDES.Clear();
+            return UTF8Encoding.UTF8.GetString(resultArray);
+        }
         public static int insertUser(string mailaddr, string password, string pop_hostname, int pop_port, bool pop_ssl, string smtp_hostname, int smtp_port, bool smtp_ssl)
         {
-            // Insert user to the table if it doesn't exist
-            string insertQuery = "INSERT OR IGNORE INTO users (mailaddress,password,pop_hostname,pop_port,pop_ssl,smtp_hostname,smtp_port,smtp_ssl) ";
-            insertQuery += "VALUES (@_mailaddress,@_password,@_pop_hostname,@_pop_port,@_pop_ssl,@_smtp_hostname,@_smtp_port,@_smtp_ssl)";
+            // Now that we have encryption, we have to know if the user really exists.
+            // If we generate a new key, the data, we already have, is invalid
+            bool userExist = false;
+            string sqlCountQuery="SELECT COUNT(*) FROM users WHERE mailaddress=@_mailaddr";
+            SQLiteCommand sqlCountCMD = new SQLiteCommand(sqlCountQuery, sqlCon);
+            sqlCountCMD.Parameters.AddWithValue("@_mailaddr", mailaddr);
+            int count=Convert.ToInt16(sqlCountCMD.ExecuteScalar());
+            string user_key = "";
+            if (count > 0)
+            {
+                userExist = true;
+                string getKeyQuery = "SELECT encryption_key FROM users WHERE mailaddress=@_mailaddr";
+                SQLiteCommand getKeyCMD = new SQLiteCommand(getKeyQuery, sqlCon);
+                getKeyCMD.Parameters.AddWithValue("@_mailaddr", mailaddr);
+                user_key = Convert.ToString(getKeyCMD.ExecuteScalar());
+            }
+
+            // Insert/replace the user on the user database
+            string insertQuery = "INSERT OR REPLACE INTO users (mailaddress,password,pop_hostname,pop_port,pop_ssl,smtp_hostname,smtp_port,smtp_ssl,encryption_key) ";
+            insertQuery += "VALUES (@_mailaddress,@_password,@_pop_hostname,@_pop_port,@_pop_ssl,@_smtp_hostname,@_smtp_port,@_smtp_ssl,@_encryption_key)";
             SQLiteCommand insertCmd = new SQLiteCommand(insertQuery, sqlCon);
             insertCmd.Parameters.AddWithValue("@_mailaddress", mailaddr);
             insertCmd.Parameters.AddWithValue("@_password", password);
@@ -107,9 +162,14 @@ namespace MerMail
             insertCmd.Parameters.AddWithValue("@_smtp_hostname", smtp_hostname);
             insertCmd.Parameters.AddWithValue("@_smtp_port", smtp_port);
             insertCmd.Parameters.AddWithValue("@_smtp_ssl", Convert.ToInt16(smtp_ssl));
+            if (!userExist)
+            {
+                user_key = generate_tdes_key();
+            }
+            insertCmd.Parameters.AddWithValue("@_encryption_key", user_key);
             insertCmd.ExecuteNonQuery();
 
-            currentUser = new mailaccount(mailaddr,password,pop_hostname,pop_port,pop_ssl,smtp_hostname,smtp_port,smtp_ssl);
+            currentUser = new mailaccount(mailaddr,password,pop_hostname,pop_port,pop_ssl,smtp_hostname,smtp_port,smtp_ssl,user_key);
 
             // Is used for making a name of the message database file for the user
             string userMD5 = genMd5(mailaddr);
@@ -135,7 +195,7 @@ namespace MerMail
             List<mailaccount> rtn = new List<mailaccount>();
             foreach (System.Data.DataRow row in tbl.Rows)
             {
-                mailaccount tmp = new mailaccount(Convert.ToString(row.ItemArray[0]), Convert.ToString(row.ItemArray[1]), Convert.ToString(row.ItemArray[2]), Convert.ToInt16(row.ItemArray[3]), Convert.ToBoolean(row.ItemArray[4]), Convert.ToString(row.ItemArray[5]), Convert.ToInt16(row.ItemArray[6]), Convert.ToBoolean(row.ItemArray[7]));
+                mailaccount tmp = new mailaccount(Convert.ToString(row.ItemArray[0]), Convert.ToString(row.ItemArray[1]), Convert.ToString(row.ItemArray[2]), Convert.ToInt16(row.ItemArray[3]), Convert.ToBoolean(row.ItemArray[4]), Convert.ToString(row.ItemArray[5]), Convert.ToInt16(row.ItemArray[6]), Convert.ToBoolean(row.ItemArray[7]),"");
                 rtn.Add(tmp);
             }
             return rtn;
@@ -204,7 +264,7 @@ namespace MerMail
                 crCMD.Parameters.AddWithValue("@_id", id);
                 crCMD.Parameters.AddWithValue("@_sender", from);
                 crCMD.Parameters.AddWithValue("@_subject", subject);
-                crCMD.Parameters.AddWithValue("@_body", body);
+                crCMD.Parameters.AddWithValue("@_body", tdes_encrypt(currentUser.encryption_key,body));
                 crCMD.Parameters.AddWithValue("@_sent", sent);
 
                 crCMD.ExecuteNonQuery();
@@ -230,7 +290,7 @@ namespace MerMail
 
             foreach (System.Data.DataRow row in tbl.Rows)
             {
-                email tmp = new email(Convert.ToString(row.ItemArray[0]), Convert.ToString(row.ItemArray[1]), Convert.ToString(row.ItemArray[2]), Convert.ToString(row.ItemArray[3]));
+                email tmp = new email(Convert.ToString(row.ItemArray[0]), Convert.ToString(row.ItemArray[1]), tdes_decrypt(currentUser.encryption_key,Convert.ToString(row.ItemArray[2])), Convert.ToString(row.ItemArray[3]));
                 allMessages.Add(tmp);
             }
 
