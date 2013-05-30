@@ -35,13 +35,19 @@
             this.loadSymmetricFromFileBtn = new System.Windows.Forms.Button();
             this.symmetricTextRadio = new System.Windows.Forms.RadioButton();
             this.groupSymmetric = new System.Windows.Forms.GroupBox();
-            this.loadAsymmetricFromFileBtn = new System.Windows.Forms.Button();
-            this.asymmetricGroup = new System.Windows.Forms.GroupBox();
-            this.asymmetricFileRadio = new System.Windows.Forms.RadioButton();
-            this.asymmetricTextRadio = new System.Windows.Forms.RadioButton();
+            this.groupAsymmetric = new System.Windows.Forms.GroupBox();
             this.asymmetricTextBox = new System.Windows.Forms.TextBox();
+            this.asymmetricTextRadio = new System.Windows.Forms.RadioButton();
+            this.asymmetricFileRadio = new System.Windows.Forms.RadioButton();
+            this.loadAsymmetricFromFileBtn = new System.Windows.Forms.Button();
+            this.symKeyFilename = new System.Windows.Forms.Label();
+            this.asymKeyFilename = new System.Windows.Forms.Label();
+            this.OKbtn = new System.Windows.Forms.Button();
+            this.CANCELbtn = new System.Windows.Forms.Button();
+            this.symmetricStatusLabel = new System.Windows.Forms.Label();
+            this.asymmetricStatusLabel = new System.Windows.Forms.Label();
             this.groupSymmetric.SuspendLayout();
-            this.asymmetricGroup.SuspendLayout();
+            this.groupAsymmetric.SuspendLayout();
             this.SuspendLayout();
             // 
             // useSymmetric
@@ -62,6 +68,8 @@
             this.symmetricTextBox.Name = "symmetricTextBox";
             this.symmetricTextBox.Size = new System.Drawing.Size(195, 56);
             this.symmetricTextBox.TabIndex = 2;
+            this.symmetricTextBox.TextChanged += new System.EventHandler(this.symmetricTextBox_TextChanged);
+            this.symmetricTextBox.Enter += new System.EventHandler(this.symmetricTextBox_Enter);
             // 
             // symmetricAsymmetricEncrypted
             // 
@@ -72,6 +80,7 @@
             this.symmetricAsymmetricEncrypted.TabIndex = 3;
             this.symmetricAsymmetricEncrypted.Text = "Symmetric key is asymmetric encrypted";
             this.symmetricAsymmetricEncrypted.UseVisualStyleBackColor = true;
+            this.symmetricAsymmetricEncrypted.CheckedChanged += new System.EventHandler(this.symmetricAsymmetricEncrypted_CheckedChanged);
             // 
             // symmetricFileRadio
             // 
@@ -88,9 +97,9 @@
             // 
             this.loadSymmetricFromFileBtn.Location = new System.Drawing.Point(36, 55);
             this.loadSymmetricFromFileBtn.Name = "loadSymmetricFromFileBtn";
-            this.loadSymmetricFromFileBtn.Size = new System.Drawing.Size(195, 23);
+            this.loadSymmetricFromFileBtn.Size = new System.Drawing.Size(57, 23);
             this.loadSymmetricFromFileBtn.TabIndex = 5;
-            this.loadSymmetricFromFileBtn.Text = "Load symmetric key from file";
+            this.loadSymmetricFromFileBtn.Text = "Load file";
             this.loadSymmetricFromFileBtn.UseVisualStyleBackColor = true;
             this.loadSymmetricFromFileBtn.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -107,7 +116,8 @@
             // 
             // groupSymmetric
             // 
-            this.groupSymmetric.Controls.Add(this.asymmetricGroup);
+            this.groupSymmetric.Controls.Add(this.symKeyFilename);
+            this.groupSymmetric.Controls.Add(this.groupAsymmetric);
             this.groupSymmetric.Controls.Add(this.symmetricAsymmetricEncrypted);
             this.groupSymmetric.Controls.Add(this.symmetricTextRadio);
             this.groupSymmetric.Controls.Add(this.symmetricTextBox);
@@ -115,43 +125,34 @@
             this.groupSymmetric.Controls.Add(this.symmetricFileRadio);
             this.groupSymmetric.Location = new System.Drawing.Point(24, 35);
             this.groupSymmetric.Name = "groupSymmetric";
-            this.groupSymmetric.Size = new System.Drawing.Size(299, 401);
+            this.groupSymmetric.Size = new System.Drawing.Size(299, 381);
             this.groupSymmetric.TabIndex = 7;
             this.groupSymmetric.TabStop = false;
             this.groupSymmetric.Text = "Symmetric options";
             // 
-            // loadAsymmetricFromFileBtn
+            // groupAsymmetric
             // 
-            this.loadAsymmetricFromFileBtn.Location = new System.Drawing.Point(31, 45);
-            this.loadAsymmetricFromFileBtn.Name = "loadAsymmetricFromFileBtn";
-            this.loadAsymmetricFromFileBtn.Size = new System.Drawing.Size(195, 23);
-            this.loadAsymmetricFromFileBtn.TabIndex = 7;
-            this.loadAsymmetricFromFileBtn.Text = "Load asymmetric key from file";
-            this.loadAsymmetricFromFileBtn.UseVisualStyleBackColor = true;
+            this.groupAsymmetric.Controls.Add(this.asymKeyFilename);
+            this.groupAsymmetric.Controls.Add(this.asymmetricTextBox);
+            this.groupAsymmetric.Controls.Add(this.asymmetricTextRadio);
+            this.groupAsymmetric.Controls.Add(this.asymmetricFileRadio);
+            this.groupAsymmetric.Controls.Add(this.loadAsymmetricFromFileBtn);
+            this.groupAsymmetric.Location = new System.Drawing.Point(23, 196);
+            this.groupAsymmetric.Name = "groupAsymmetric";
+            this.groupAsymmetric.Size = new System.Drawing.Size(250, 172);
+            this.groupAsymmetric.TabIndex = 8;
+            this.groupAsymmetric.TabStop = false;
+            this.groupAsymmetric.Text = "Asymmetric options";
             // 
-            // asymmetricGroup
+            // asymmetricTextBox
             // 
-            this.asymmetricGroup.Controls.Add(this.asymmetricTextBox);
-            this.asymmetricGroup.Controls.Add(this.asymmetricTextRadio);
-            this.asymmetricGroup.Controls.Add(this.asymmetricFileRadio);
-            this.asymmetricGroup.Controls.Add(this.loadAsymmetricFromFileBtn);
-            this.asymmetricGroup.Location = new System.Drawing.Point(23, 196);
-            this.asymmetricGroup.Name = "asymmetricGroup";
-            this.asymmetricGroup.Size = new System.Drawing.Size(250, 172);
-            this.asymmetricGroup.TabIndex = 8;
-            this.asymmetricGroup.TabStop = false;
-            this.asymmetricGroup.Text = "Asymmetric options";
-            // 
-            // asymmetricFileRadio
-            // 
-            this.asymmetricFileRadio.AutoSize = true;
-            this.asymmetricFileRadio.Location = new System.Drawing.Point(16, 22);
-            this.asymmetricFileRadio.Name = "asymmetricFileRadio";
-            this.asymmetricFileRadio.Size = new System.Drawing.Size(41, 17);
-            this.asymmetricFileRadio.TabIndex = 8;
-            this.asymmetricFileRadio.TabStop = true;
-            this.asymmetricFileRadio.Text = "File";
-            this.asymmetricFileRadio.UseVisualStyleBackColor = true;
+            this.asymmetricTextBox.Location = new System.Drawing.Point(31, 97);
+            this.asymmetricTextBox.Multiline = true;
+            this.asymmetricTextBox.Name = "asymmetricTextBox";
+            this.asymmetricTextBox.Size = new System.Drawing.Size(195, 56);
+            this.asymmetricTextBox.TabIndex = 10;
+            this.asymmetricTextBox.TextChanged += new System.EventHandler(this.asymmetricTextBox_TextChanged);
+            this.asymmetricTextBox.Enter += new System.EventHandler(this.asymmetricTextBox_Enter);
             // 
             // asymmetricTextRadio
             // 
@@ -164,19 +165,94 @@
             this.asymmetricTextRadio.Text = "Text";
             this.asymmetricTextRadio.UseVisualStyleBackColor = true;
             // 
-            // asymmetricTextBox
+            // asymmetricFileRadio
             // 
-            this.asymmetricTextBox.Location = new System.Drawing.Point(31, 97);
-            this.asymmetricTextBox.Multiline = true;
-            this.asymmetricTextBox.Name = "asymmetricTextBox";
-            this.asymmetricTextBox.Size = new System.Drawing.Size(195, 56);
-            this.asymmetricTextBox.TabIndex = 10;
+            this.asymmetricFileRadio.AutoSize = true;
+            this.asymmetricFileRadio.Location = new System.Drawing.Point(16, 22);
+            this.asymmetricFileRadio.Name = "asymmetricFileRadio";
+            this.asymmetricFileRadio.Size = new System.Drawing.Size(41, 17);
+            this.asymmetricFileRadio.TabIndex = 8;
+            this.asymmetricFileRadio.TabStop = true;
+            this.asymmetricFileRadio.Text = "File";
+            this.asymmetricFileRadio.UseVisualStyleBackColor = true;
+            // 
+            // loadAsymmetricFromFileBtn
+            // 
+            this.loadAsymmetricFromFileBtn.Location = new System.Drawing.Point(31, 45);
+            this.loadAsymmetricFromFileBtn.Name = "loadAsymmetricFromFileBtn";
+            this.loadAsymmetricFromFileBtn.Size = new System.Drawing.Size(62, 23);
+            this.loadAsymmetricFromFileBtn.TabIndex = 7;
+            this.loadAsymmetricFromFileBtn.Text = "Load file";
+            this.loadAsymmetricFromFileBtn.UseVisualStyleBackColor = true;
+            this.loadAsymmetricFromFileBtn.Click += new System.EventHandler(this.loadAsymmetricFromFileBtn_Click);
+            // 
+            // symKeyFilename
+            // 
+            this.symKeyFilename.AutoSize = true;
+            this.symKeyFilename.Location = new System.Drawing.Point(99, 60);
+            this.symKeyFilename.Name = "symKeyFilename";
+            this.symKeyFilename.Size = new System.Drawing.Size(72, 13);
+            this.symKeyFilename.TabIndex = 9;
+            this.symKeyFilename.Text = "No file loaded";
+            // 
+            // asymKeyFilename
+            // 
+            this.asymKeyFilename.AutoSize = true;
+            this.asymKeyFilename.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.asymKeyFilename.Location = new System.Drawing.Point(99, 50);
+            this.asymKeyFilename.Name = "asymKeyFilename";
+            this.asymKeyFilename.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.asymKeyFilename.Size = new System.Drawing.Size(72, 13);
+            this.asymKeyFilename.TabIndex = 11;
+            this.asymKeyFilename.Text = "No file loaded";
+            // 
+            // OKbtn
+            // 
+            this.OKbtn.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.OKbtn.Location = new System.Drawing.Point(206, 458);
+            this.OKbtn.Name = "OKbtn";
+            this.OKbtn.Size = new System.Drawing.Size(122, 28);
+            this.OKbtn.TabIndex = 8;
+            this.OKbtn.Text = "Decrypt";
+            this.OKbtn.UseVisualStyleBackColor = true;
+            // 
+            // CANCELbtn
+            // 
+            this.CANCELbtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.CANCELbtn.Location = new System.Drawing.Point(103, 458);
+            this.CANCELbtn.Name = "CANCELbtn";
+            this.CANCELbtn.Size = new System.Drawing.Size(97, 28);
+            this.CANCELbtn.TabIndex = 9;
+            this.CANCELbtn.Text = "Cancel";
+            this.CANCELbtn.UseVisualStyleBackColor = true;
+            // 
+            // symmetricStatusLabel
+            // 
+            this.symmetricStatusLabel.AutoSize = true;
+            this.symmetricStatusLabel.Location = new System.Drawing.Point(21, 429);
+            this.symmetricStatusLabel.Name = "symmetricStatusLabel";
+            this.symmetricStatusLabel.Size = new System.Drawing.Size(35, 13);
+            this.symmetricStatusLabel.TabIndex = 10;
+            this.symmetricStatusLabel.Text = "label1";
+            // 
+            // asymmetricStatusLabel
+            // 
+            this.asymmetricStatusLabel.AutoSize = true;
+            this.asymmetricStatusLabel.Location = new System.Drawing.Point(21, 442);
+            this.asymmetricStatusLabel.Name = "asymmetricStatusLabel";
+            this.asymmetricStatusLabel.Size = new System.Drawing.Size(35, 13);
+            this.asymmetricStatusLabel.TabIndex = 11;
+            this.asymmetricStatusLabel.Text = "label1";
             // 
             // decryptForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(339, 448);
+            this.ClientSize = new System.Drawing.Size(340, 498);
+            this.Controls.Add(this.asymmetricStatusLabel);
+            this.Controls.Add(this.symmetricStatusLabel);
+            this.Controls.Add(this.CANCELbtn);
+            this.Controls.Add(this.OKbtn);
             this.Controls.Add(this.groupSymmetric);
             this.Controls.Add(this.useSymmetric);
             this.Name = "decryptForm";
@@ -184,8 +260,8 @@
             this.Load += new System.EventHandler(this.decryptForm_Load);
             this.groupSymmetric.ResumeLayout(false);
             this.groupSymmetric.PerformLayout();
-            this.asymmetricGroup.ResumeLayout(false);
-            this.asymmetricGroup.PerformLayout();
+            this.groupAsymmetric.ResumeLayout(false);
+            this.groupAsymmetric.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -200,10 +276,16 @@
         private System.Windows.Forms.Button loadSymmetricFromFileBtn;
         private System.Windows.Forms.RadioButton symmetricTextRadio;
         private System.Windows.Forms.GroupBox groupSymmetric;
-        private System.Windows.Forms.GroupBox asymmetricGroup;
+        private System.Windows.Forms.GroupBox groupAsymmetric;
         private System.Windows.Forms.TextBox asymmetricTextBox;
         private System.Windows.Forms.RadioButton asymmetricTextRadio;
         private System.Windows.Forms.RadioButton asymmetricFileRadio;
         private System.Windows.Forms.Button loadAsymmetricFromFileBtn;
+        private System.Windows.Forms.Label symKeyFilename;
+        private System.Windows.Forms.Label asymKeyFilename;
+        private System.Windows.Forms.Button OKbtn;
+        private System.Windows.Forms.Button CANCELbtn;
+        private System.Windows.Forms.Label symmetricStatusLabel;
+        private System.Windows.Forms.Label asymmetricStatusLabel;
     }
 }

@@ -21,66 +21,19 @@ namespace MerMail
             {
                 bytestrength = bs;
                 data = d;
+                
             }
         }
-        public static bool saveFile(string filename, string title, string typename, string filetype, string data)
-        {
-            SaveFileDialog saveDialog = new SaveFileDialog();
-            saveDialog.FileName = filename;
-            saveDialog.Title = title;
-            saveDialog.Filter = string.Format("{0}|{1}", typename, filetype);
-            DialogResult rtn = saveDialog.ShowDialog();
-            if (rtn == DialogResult.OK)
-            {
-                try
-                {
-                    StreamWriter streamWriter = new StreamWriter(saveDialog.FileName, false);
-                    if (data != null)
-                    { streamWriter.Write(data); }
-                    streamWriter.Close();
-                    return true;
-                }
-                catch (Exception Ex)
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
-
-        }
-        public static string openFile(string filename, string title, string typename, string filetype)
-        {
-            OpenFileDialog openDialog = new OpenFileDialog();
-            openDialog.FileName = filename;
-            openDialog.Title = title;
-            openDialog.Filter = string.Format("{0}|{1}", typename, filetype);
-            string data = null;
-            DialogResult rtn = openDialog.ShowDialog();
-            if (rtn == DialogResult.OK)
-            {
-                if (File.Exists(openDialog.FileName))
-                {
-                    StreamReader streamReader = new StreamReader(openDialog.FileName, true);
-                    data = streamReader.ReadToEnd();
-                    streamReader.Close();
-                    return data;
-                }
-            }
-            return data;
-
-        }
+        
         public static void generateKeys(int bitstrength)
         {
             RSACryptoServiceProvider RSAProvider = new RSACryptoServiceProvider(bitstrength);
             string publicAndPrivateKeys = "<BitStrength>" + bitstrength.ToString() + "</BitStrength>" + RSAProvider.ToXmlString(true);
             string justPublicKey = "<BitStrength>" + bitstrength.ToString() + "</BitStrength>" + RSAProvider.ToXmlString(false);
 
-            if (saveFile("key.kez", "Save Public/Private Keys As", "Public/Private Keys Document( *.kez )", "*.kez", publicAndPrivateKeys))
+            if (MerMail.Program.saveFile("key.kez", "Save Public/Private Keys As", "Public/Private Keys Document( *.kez )", "*.kez", publicAndPrivateKeys))
             {
-                while (!saveFile("publickey.pke", "Save Public Key As", "Public Key Document( *.pke )", "*.pke", justPublicKey))
+                while (!MerMail.Program.saveFile("publickey.pke", "Save Public Key As", "Public Key Document( *.pke )", "*.pke", justPublicKey))
                 {
                     // We'll annoy you, until you saved the public key..
                 }

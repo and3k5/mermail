@@ -52,6 +52,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="asymmetric.cs" />
+    <Compile Include="DecryptedMail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DecryptedMail.Designer.cs">
+      <DependentUpon>DecryptedMail.cs</DependentUpon>
+    </Compile>
     <Compile Include="decryptForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -79,6 +85,9 @@
       <DependentUpon>Send.cs</DependentUpon>
     </Compile>
     <Compile Include="symmetric.cs" />
+    <EmbeddedResource Include="DecryptedMail.resx">
+      <DependentUpon>DecryptedMail.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="decryptForm.resx">
       <DependentUpon>decryptForm.cs</DependentUpon>
     </EmbeddedResource>

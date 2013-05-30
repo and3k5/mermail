@@ -9,11 +9,12 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Net.Mail;
 using System.ComponentModel;
+using System.IO;
 
 
 namespace MerMail
 {
-    static class Program
+    public static class Program
     {
         /// <summary>
         /// The main entry point for the application.
@@ -95,42 +96,70 @@ namespace MerMail
                 date = _date;
             }
         }
-        //private static string generate_tdes_key() {
-        //    using (TripleDESCryptoServiceProvider tdes = new TripleDESCryptoServiceProvider()) {
-        //        tdes.GenerateKey();
-        //        return ASCIIEncoding.ASCII.GetString(tdes.Key);
-        //    }
-        //}
-        //private static string tdes_encrypt(string key, string rawdata)
-        //{
-        //    TripleDESCryptoServiceProvider TDES = new TripleDESCryptoServiceProvider();
-        //    byte[] data = UTF8Encoding.UTF8.GetBytes(rawdata);
-        //    TDES.GenerateKey();
-        //    TDES.KeySize = 192;
-        //    TDES.Key = ASCIIEncoding.ASCII.GetBytes(key);
-        //    TDES.Mode = CipherMode.ECB;
-        //    TDES.Padding = PaddingMode.PKCS7;
-        //    ICryptoTransform cTransform = TDES.CreateEncryptor();
-        //    byte[] resultArray =
-        //      cTransform.TransformFinalBlock(data, 0,
-        //      data.Length);
-        //    TDES.Clear();
-        //    return Convert.ToBase64String(resultArray, 0, resultArray.Length);
-        //}
-        //private static string tdes_decrypt(string key, string crypteddata)
-        //{
-        //    TripleDESCryptoServiceProvider TDES = new TripleDESCryptoServiceProvider();
-        //    byte[] data = Convert.FromBase64String(crypteddata);
-        //    TDES.KeySize = 192;
-        //    TDES.Key = ASCIIEncoding.ASCII.GetBytes(key);
-        //    TDES.Mode = CipherMode.ECB;
-        //    TDES.Padding = PaddingMode.PKCS7;
-        //    ICryptoTransform cTransform = TDES.CreateDecryptor();
-        //    byte[] resultArray = cTransform.TransformFinalBlock(
-        //                 data, 0, data.Length);
-        //    TDES.Clear();
-        //    return UTF8Encoding.UTF8.GetString(resultArray);
-        //}
+        public struct MFile 
+        {
+            public string fullpath;
+            public string filename;
+            public string data;
+            public bool valid;
+            public MFile(string f, string fn, string d, bool v)
+            {
+                fullpath = f;
+                filename = fn;
+                data = d;
+                valid = v;
+            }
+        }
+        public static bool saveFile(string filename, string title, string typename, string filetype, string data)
+        {
+            SaveFileDialog saveDialog = new SaveFileDialog();
+            saveDialog.FileName = filename;
+            saveDialog.Title = title;
+            saveDialog.Filter = string.Format("{0}|{1}", typename, filetype);
+            DialogResult rtn = saveDialog.ShowDialog();
+            if (rtn == DialogResult.OK)
+            {
+                try
+                {
+                    StreamWriter streamWriter = new StreamWriter(saveDialog.FileName, false);
+                    if (data != null)
+                    { streamWriter.Write(data); }
+                    streamWriter.Close();
+                    return true;
+                }
+                catch (Exception Ex)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        public static MFile openFile(string filename, string title, string typename, string filetype)
+        {
+            OpenFileDialog openDialog = new OpenFileDialog();
+            openDialog.FileName = filename;
+            openDialog.Title = title;
+            openDialog.Filter = string.Format("{0}|{1}", typename, filetype);
+            string data = null;
+            bool valid = false;
+            DialogResult rtn = openDialog.ShowDialog();
+            if (rtn == DialogResult.OK)
+            {
+                if (File.Exists(openDialog.FileName))
+                {
+                    StreamReader streamReader = new StreamReader(openDialog.FileName, true);
+                    data = streamReader.ReadToEnd();
+                    streamReader.Close();
+                    valid = true;
+                }
+            }
+            return new MFile(openDialog.FileName, openDialog.SafeFileName, data, valid);
+        }
         public static int insertUser(string mailaddr, string password, string pop_hostname, int pop_port, bool pop_ssl, string smtp_hostname, int smtp_port, bool smtp_ssl)
         {
             // Now that we have encryption, we have to know if the user really exists.
@@ -296,6 +325,23 @@ namespace MerMail
 
             e.Result = allMessages;
         }
+        public static email decryptMail(email mail, bool useSymmetric, string symmetricKey, bool useAsymmetric, MerMail.Asymmetric.Key privatekey)
+        {
+            email rtn = mail;
+            string body = rtn.body;
+            string symKey = symmetricKey;
+            if (useSymmetric)
+            {
+                if (useAsymmetric)
+                {
+                    symKey = MerMail.Asymmetric.DecryptString(symmetricKey, privatekey);
+                }
+                body = MerMail.Symmetric.DecryptString(symKey, body);
+            }
+            rtn.body = body;
+            return rtn;
+        }
+        
         public static bool AuthenticateLog(string Hostname, int port, bool usessl, string username, string password)
         {
             popauth = true;

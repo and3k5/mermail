@@ -104,11 +104,11 @@ namespace MerMail
             GetMailsFromServer(); 
             RMT.Enabled = true;
         }
-
+        private MerMail.Program.email currentMail;
         private void mailBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (mailBox.SelectedIndex == -1) return;
-            MerMail.Program.email currentMail = result.ToArray()[mailBox.SelectedIndex];
+            currentMail = result.ToArray()[mailBox.SelectedIndex];
             // Goodmorning IE
             webBrowser1.Navigate("about:blank");
             HtmlDocument document = webBrowser1.Document;
@@ -139,6 +139,16 @@ namespace MerMail
             decryptForm decForm = new decryptForm();
             if (decForm.ShowDialog() == DialogResult.OK)
             {
+                try
+                {
+                    MerMail.Program.email decryptedMail = MerMail.Program.decryptMail(currentMail,decForm.rtnUseSymmetric,decForm.SymmetricKey,decForm.rtnUseAsymmetric,decForm.private_key);
+                    DecryptedMail decMailForm = new DecryptedMail(decryptedMail);
+                    decMailForm.Show();
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show("Fejl ved decryptering:" + Environment.NewLine + err.Message);
+                }
                 //decForm.private_key
                 //decForm.private
             }
