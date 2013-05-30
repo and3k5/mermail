@@ -11,8 +11,12 @@ using System.Xml;
 
 namespace MerMail
 {
+    // This whole Asymmetric thing is inspired by an example from 
+    // RSACryptoPad: http://www.codeproject.com/Articles/10877/Public-Key-RSA-Encryption-in-C-NET
+
     public class Asymmetric
     {
+        // Our own structure for a private or public key
         public struct Key
         {
             public int bytestrength;
@@ -24,6 +28,8 @@ namespace MerMail
                 
             }
         }
+
+        // generate new keys
         public static string generateKeys(int bitstrength)
         {
             RSACryptoServiceProvider RSAProvider = new RSACryptoServiceProvider(bitstrength);
@@ -40,8 +46,11 @@ namespace MerMail
                 }
 
             }
+            // Return string is used for the encryptForm, when making a new mail
             return publicKeyPath;
         }
+
+        // make the key's string data to a new Key structure
         public static Key parseKeyXML(string data)
         {
             Key rtn = new Key(0, "");
@@ -59,6 +68,9 @@ namespace MerMail
             return rtn;
         }
 
+        // Encrypt input string with the public key specified
+        // Copied from RSACryptoPad (edited a bit, so it
+        // supports our key structure)
         public static string EncryptString(string inputString, Key key)
         {
             int dwKeySize = key.bytestrength;
@@ -90,6 +102,9 @@ namespace MerMail
             return stringBuilder.ToString();
         }
 
+        // Decrypt input string with the public key specified
+        // Copied from RSACryptoPad (also edited a bit, so it
+        // supports our key structure)
         public static string DecryptString(string inputString, Key key)
         {
             int dwKeySize = key.bytestrength;

@@ -5,10 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 
+// This whole Symmetric thing is mostly from MSDN references and
+// written into a class, so it's much easier to put into our project
 namespace MerMail
 {
     class Symmetric
     {
+        // Generate a new symmetric key
         public static string generateKey()
         {
             using (TripleDESCryptoServiceProvider tdes = new TripleDESCryptoServiceProvider())
@@ -17,12 +20,12 @@ namespace MerMail
                 return ASCIIEncoding.ASCII.GetString(tdes.Key);
             }
         }
+
+        // Encrypt rawdata with symmetric key specified
         public static string EncryptString(string key, string rawdata)
         {
             TripleDESCryptoServiceProvider TDES = new TripleDESCryptoServiceProvider();
             byte[] data = UTF8Encoding.UTF8.GetBytes(rawdata);
-            TDES.GenerateKey();
-            TDES.KeySize = 192;
             TDES.Key = ASCIIEncoding.ASCII.GetBytes(key);
             TDES.Mode = CipherMode.ECB;
             TDES.Padding = PaddingMode.PKCS7;
@@ -33,6 +36,8 @@ namespace MerMail
             TDES.Clear();
             return Convert.ToBase64String(resultArray, 0, resultArray.Length);
         }
+
+        // Decrypt encrypted data with symmetric key specified
         public static string DecryptString(string key, string crypteddata)
         {
             TripleDESCryptoServiceProvider TDES = new TripleDESCryptoServiceProvider();
