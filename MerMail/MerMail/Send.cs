@@ -32,13 +32,50 @@ namespace MerMail
 
         private void Sendbtn_Click(object sender, EventArgs e)
         {
-            MerMail.Program.SendMail(TB.Text, Subjectbox.Text, BodyBox.Text);
+            MerMail.Program.email mail = new MerMail.Program.email(TB.Text, Subjectbox.Text, BodyBox.Text);
+            if (useEncryption.Checked)
+            {
+                try
+                {
+                    mail = MerMail.Program.encryptMail(mail, useSymmetric, SymmetricKey, useAsymmetric, public_key);
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show("Fejl ved encryptering:" + Environment.NewLine + err.Message);
+                    return;
+                }
+                //decForm.private_key
+                //decForm.private
+            }
+            
+            MerMail.Program.SendMail(mail.to, mail.subject, mail.body);
             this.Close();
         }
 
         private void Send_Load(object sender, EventArgs e)
         {
             
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            encSetBtn.Enabled = useEncryption.Checked;
+        }
+        public bool useSymmetric = false;
+        public bool useAsymmetric = false;
+        public MerMail.Asymmetric.Key public_key = new MerMail.Asymmetric.Key();
+        public string SymmetricKey = "";
+
+        private void encSetBtn_Click(object sender, EventArgs e)
+        {
+            encryptForm encForm = new encryptForm();
+            if (encForm.ShowDialog() == DialogResult.OK)
+            {
+                useSymmetric = encForm.rtnUseSymmetric;
+                useAsymmetric = encForm.rtnUseAsymmetric;
+                public_key = encForm.public_key;
+                SymmetricKey = encForm.SymmetricKey;
+            }
         }
     }
 }

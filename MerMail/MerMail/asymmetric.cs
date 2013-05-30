@@ -24,20 +24,23 @@ namespace MerMail
                 
             }
         }
-        
-        public static void generateKeys(int bitstrength)
+        public static string generateKeys(int bitstrength)
         {
             RSACryptoServiceProvider RSAProvider = new RSACryptoServiceProvider(bitstrength);
             string publicAndPrivateKeys = "<BitStrength>" + bitstrength.ToString() + "</BitStrength>" + RSAProvider.ToXmlString(true);
             string justPublicKey = "<BitStrength>" + bitstrength.ToString() + "</BitStrength>" + RSAProvider.ToXmlString(false);
-
-            if (MerMail.Program.saveFile("key.kez", "Save Public/Private Keys As", "Public/Private Keys Document( *.kez )", "*.kez", publicAndPrivateKeys))
+            string publicKeyPath = null;
+            string privateKeyPath=MerMail.Program.saveFile("key.kez", "Save Public/Private Keys As", "Public/Private Keys Document( *.kez )", "*.kez", publicAndPrivateKeys,0,null);
+            if (privateKeyPath!=null)
             {
-                while (!MerMail.Program.saveFile("publickey.pke", "Save Public Key As", "Public Key Document( *.pke )", "*.pke", justPublicKey))
+                while (publicKeyPath==null)
                 {
                     // We'll annoy you, until you saved the public key..
+                    publicKeyPath=MerMail.Program.saveFile("publickey.pke", "Save Public Key As", "Public Key Document( *.pke )", "*.pke", justPublicKey,1,privateKeyPath);
                 }
+
             }
+            return publicKeyPath;
         }
         public static Key parseKeyXML(string data)
         {

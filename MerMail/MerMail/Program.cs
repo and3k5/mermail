@@ -88,12 +88,22 @@ namespace MerMail
             public string subject;
             public string body;
             public string date;
+            public string to;
             public email(string _sender, string _subject, string _body, string _date)
             {
                 sender = _sender;
                 subject = _subject;
                 body = _body;
                 date = _date;
+                to = "";
+            }
+            public email(string _to,string _subject, string _body)
+            {
+                sender = "";
+                subject = _subject;
+                body = _body;
+                date = "";
+                to = _to;
             }
         }
         public struct MFile 
@@ -136,8 +146,47 @@ namespace MerMail
             {
                 return false;
             }
+        }
+        // Overload:
+        // If we put an int at the end, it returns the path of the saved file
+        // The int is used anyway..
+        public static string saveFile(string filename, string title, string typename, string filetype, string data, int withFileName,string startPath)
+        {
+            SaveFileDialog saveDialog = new SaveFileDialog();
+            saveDialog.FileName = filename;
+            saveDialog.Title = title;
+            if (startPath != null)
+            {
+                saveDialog.InitialDirectory = startPath;
+            }
+            saveDialog.Filter = string.Format("{0}|{1}", typename, filetype);
+            DialogResult rtn = saveDialog.ShowDialog();
+            if (rtn == DialogResult.OK)
+            {
+                try
+                {
+                    StreamWriter streamWriter = new StreamWriter(saveDialog.FileName, false);
+                    if (data != null)
+                    { streamWriter.Write(data); }
+                    streamWriter.Close();
+                    if (withFileName==1) {
+                        return saveDialog.FileName;
+                    }else{
+                        return new FileInfo(saveDialog.FileName).DirectoryName;
+                    }
+                }
+                catch (Exception Ex)
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
 
         }
+
 
         public static MFile openFile(string filename, string title, string typename, string filetype)
         {
@@ -339,6 +388,28 @@ namespace MerMail
                 body = MerMail.Symmetric.DecryptString(symKey, body);
             }
             rtn.body = body;
+            return rtn;
+        }
+
+        public static email encryptMail(email mail, bool useSymmetric, string symmetricKey, bool useAsymmetric, MerMail.Asymmetric.Key public_key)
+        {
+            email rtn = mail;
+            string body = rtn.body;
+            string symKey = symmetricKey;
+            string symKeyName = "symmetric_raw.txt";
+            string diagTitle = "Save symmetric key to file";
+            if (useSymmetric)
+            {
+                body = MerMail.Symmetric.EncryptString(symKey, body);
+                if (useAsymmetric)
+                {
+                    symKey = MerMail.Asymmetric.EncryptString(symmetricKey, public_key);
+                }
+                symKeyName = "symmetric_encrypted.txt";
+                diagTitle = "Save encrypted symmetric key to file";
+            }
+            rtn.body = body;
+            MerMail.Program.saveFile(symKeyName, diagTitle, "Any (*.*)", "*.*", symKey);
             return rtn;
         }
         

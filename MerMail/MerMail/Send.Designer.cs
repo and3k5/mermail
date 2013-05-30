@@ -34,6 +34,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.Sendbtn = new System.Windows.Forms.Button();
+            this.useEncryption = new System.Windows.Forms.CheckBox();
+            this.encSetBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // TB
@@ -78,19 +80,43 @@
             // 
             // Sendbtn
             // 
-            this.Sendbtn.Location = new System.Drawing.Point(12, 429);
+            this.Sendbtn.Location = new System.Drawing.Point(509, 429);
             this.Sendbtn.Name = "Sendbtn";
-            this.Sendbtn.Size = new System.Drawing.Size(635, 27);
+            this.Sendbtn.Size = new System.Drawing.Size(138, 27);
             this.Sendbtn.TabIndex = 5;
             this.Sendbtn.Text = "Send";
             this.Sendbtn.UseVisualStyleBackColor = true;
             this.Sendbtn.Click += new System.EventHandler(this.Sendbtn_Click);
+            // 
+            // useEncryption
+            // 
+            this.useEncryption.AutoSize = true;
+            this.useEncryption.Location = new System.Drawing.Point(241, 435);
+            this.useEncryption.Name = "useEncryption";
+            this.useEncryption.Size = new System.Drawing.Size(102, 17);
+            this.useEncryption.TabIndex = 6;
+            this.useEncryption.Text = "Encrypt this mail";
+            this.useEncryption.UseVisualStyleBackColor = true;
+            this.useEncryption.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
+            // encSetBtn
+            // 
+            this.encSetBtn.Enabled = false;
+            this.encSetBtn.Location = new System.Drawing.Point(349, 431);
+            this.encSetBtn.Name = "encSetBtn";
+            this.encSetBtn.Size = new System.Drawing.Size(113, 23);
+            this.encSetBtn.TabIndex = 7;
+            this.encSetBtn.Text = "Encryption settings..";
+            this.encSetBtn.UseVisualStyleBackColor = true;
+            this.encSetBtn.Click += new System.EventHandler(this.encSetBtn_Click);
             // 
             // Send
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(659, 468);
+            this.Controls.Add(this.encSetBtn);
+            this.Controls.Add(this.useEncryption);
             this.Controls.Add(this.Sendbtn);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -113,5 +139,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button Sendbtn;
+        private System.Windows.Forms.CheckBox useEncryption;
+        private System.Windows.Forms.Button encSetBtn;
     }
 }
