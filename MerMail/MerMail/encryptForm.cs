@@ -193,5 +193,13 @@ namespace MerMail
             }
             updateControls();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            symmetricTextRadio.Checked = true;
+            symmetricTextBox.Text = MerMail.Symmetric.generateKey();
+            useSymmetric.Checked = true;
+            updateControls();
+        }
     }
 }

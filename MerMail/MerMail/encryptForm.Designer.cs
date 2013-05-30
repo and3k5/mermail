@@ -37,6 +37,8 @@
             this.groupSymmetric = new System.Windows.Forms.GroupBox();
             this.symKeyFilename = new System.Windows.Forms.Label();
             this.groupAsymmetric = new System.Windows.Forms.GroupBox();
+            this.bytestrengthNum = new System.Windows.Forms.NumericUpDown();
+            this.button1 = new System.Windows.Forms.Button();
             this.asymKeyFilename = new System.Windows.Forms.Label();
             this.asymmetricTextBox = new System.Windows.Forms.TextBox();
             this.asymmetricTextRadio = new System.Windows.Forms.RadioButton();
@@ -46,8 +48,7 @@
             this.CANCELbtn = new System.Windows.Forms.Button();
             this.symmetricStatusLabel = new System.Windows.Forms.Label();
             this.asymmetricStatusLabel = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.bytestrengthNum = new System.Windows.Forms.NumericUpDown();
+            this.button2 = new System.Windows.Forms.Button();
             this.groupSymmetric.SuspendLayout();
             this.groupAsymmetric.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bytestrengthNum)).BeginInit();
@@ -119,6 +120,7 @@
             // 
             // groupSymmetric
             // 
+            this.groupSymmetric.Controls.Add(this.button2);
             this.groupSymmetric.Controls.Add(this.symKeyFilename);
             this.groupSymmetric.Controls.Add(this.groupAsymmetric);
             this.groupSymmetric.Controls.Add(this.symmetricAsymmetricEncrypted);
@@ -157,6 +159,43 @@
             this.groupAsymmetric.TabIndex = 8;
             this.groupAsymmetric.TabStop = false;
             this.groupAsymmetric.Text = "Asymmetric options";
+            // 
+            // bytestrengthNum
+            // 
+            this.bytestrengthNum.Increment = new decimal(new int[] {
+            8,
+            0,
+            0,
+            0});
+            this.bytestrengthNum.Location = new System.Drawing.Point(31, 48);
+            this.bytestrengthNum.Maximum = new decimal(new int[] {
+            16384,
+            0,
+            0,
+            0});
+            this.bytestrengthNum.Minimum = new decimal(new int[] {
+            384,
+            0,
+            0,
+            0});
+            this.bytestrengthNum.Name = "bytestrengthNum";
+            this.bytestrengthNum.Size = new System.Drawing.Size(64, 20);
+            this.bytestrengthNum.TabIndex = 13;
+            this.bytestrengthNum.Value = new decimal(new int[] {
+            1024,
+            0,
+            0,
+            0});
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(101, 45);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(44, 23);
+            this.button1.TabIndex = 12;
+            this.button1.Text = "New";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // asymKeyFilename
             // 
@@ -249,42 +288,15 @@
             this.asymmetricStatusLabel.TabIndex = 11;
             this.asymmetricStatusLabel.Text = "label1";
             // 
-            // button1
+            // button2
             // 
-            this.button1.Location = new System.Drawing.Point(101, 45);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(44, 23);
-            this.button1.TabIndex = 12;
-            this.button1.Text = "New";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
-            // 
-            // bytestrengthNum
-            // 
-            this.bytestrengthNum.Increment = new decimal(new int[] {
-            8,
-            0,
-            0,
-            0});
-            this.bytestrengthNum.Location = new System.Drawing.Point(31, 48);
-            this.bytestrengthNum.Maximum = new decimal(new int[] {
-            16384,
-            0,
-            0,
-            0});
-            this.bytestrengthNum.Minimum = new decimal(new int[] {
-            384,
-            0,
-            0,
-            0});
-            this.bytestrengthNum.Name = "bytestrengthNum";
-            this.bytestrengthNum.Size = new System.Drawing.Size(64, 20);
-            this.bytestrengthNum.TabIndex = 13;
-            this.bytestrengthNum.Value = new decimal(new int[] {
-            1024,
-            0,
-            0,
-            0});
+            this.button2.Location = new System.Drawing.Point(242, 114);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(89, 28);
+            this.button2.TabIndex = 10;
+            this.button2.Text = "Experimental";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // encryptForm
             // 
@@ -332,5 +344,6 @@
         private System.Windows.Forms.Button OKbtn;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.NumericUpDown bytestrengthNum;
+        private System.Windows.Forms.Button button2;
     }
 }
