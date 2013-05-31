@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(decryptForm));
             this.useSymmetric = new System.Windows.Forms.CheckBox();
             this.symmetricTextBox = new System.Windows.Forms.TextBox();
             this.symmetricAsymmetricEncrypted = new System.Windows.Forms.CheckBox();
@@ -35,13 +36,13 @@
             this.loadSymmetricFromFileBtn = new System.Windows.Forms.Button();
             this.symmetricTextRadio = new System.Windows.Forms.RadioButton();
             this.groupSymmetric = new System.Windows.Forms.GroupBox();
+            this.symKeyFilename = new System.Windows.Forms.Label();
             this.groupAsymmetric = new System.Windows.Forms.GroupBox();
+            this.asymKeyFilename = new System.Windows.Forms.Label();
             this.asymmetricTextBox = new System.Windows.Forms.TextBox();
             this.asymmetricTextRadio = new System.Windows.Forms.RadioButton();
             this.asymmetricFileRadio = new System.Windows.Forms.RadioButton();
             this.loadAsymmetricFromFileBtn = new System.Windows.Forms.Button();
-            this.symKeyFilename = new System.Windows.Forms.Label();
-            this.asymKeyFilename = new System.Windows.Forms.Label();
             this.OKbtn = new System.Windows.Forms.Button();
             this.CANCELbtn = new System.Windows.Forms.Button();
             this.symmetricStatusLabel = new System.Windows.Forms.Label();
@@ -130,6 +131,15 @@
             this.groupSymmetric.TabStop = false;
             this.groupSymmetric.Text = "Symmetric options";
             // 
+            // symKeyFilename
+            // 
+            this.symKeyFilename.AutoSize = true;
+            this.symKeyFilename.Location = new System.Drawing.Point(99, 60);
+            this.symKeyFilename.Name = "symKeyFilename";
+            this.symKeyFilename.Size = new System.Drawing.Size(72, 13);
+            this.symKeyFilename.TabIndex = 9;
+            this.symKeyFilename.Text = "No file loaded";
+            // 
             // groupAsymmetric
             // 
             this.groupAsymmetric.Controls.Add(this.asymKeyFilename);
@@ -143,6 +153,17 @@
             this.groupAsymmetric.TabIndex = 8;
             this.groupAsymmetric.TabStop = false;
             this.groupAsymmetric.Text = "Asymmetric options";
+            // 
+            // asymKeyFilename
+            // 
+            this.asymKeyFilename.AutoSize = true;
+            this.asymKeyFilename.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.asymKeyFilename.Location = new System.Drawing.Point(99, 50);
+            this.asymKeyFilename.Name = "asymKeyFilename";
+            this.asymKeyFilename.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.asymKeyFilename.Size = new System.Drawing.Size(72, 13);
+            this.asymKeyFilename.TabIndex = 11;
+            this.asymKeyFilename.Text = "No file loaded";
             // 
             // asymmetricTextBox
             // 
@@ -185,26 +206,6 @@
             this.loadAsymmetricFromFileBtn.Text = "Load file";
             this.loadAsymmetricFromFileBtn.UseVisualStyleBackColor = true;
             this.loadAsymmetricFromFileBtn.Click += new System.EventHandler(this.loadAsymmetricFromFileBtn_Click);
-            // 
-            // symKeyFilename
-            // 
-            this.symKeyFilename.AutoSize = true;
-            this.symKeyFilename.Location = new System.Drawing.Point(99, 60);
-            this.symKeyFilename.Name = "symKeyFilename";
-            this.symKeyFilename.Size = new System.Drawing.Size(72, 13);
-            this.symKeyFilename.TabIndex = 9;
-            this.symKeyFilename.Text = "No file loaded";
-            // 
-            // asymKeyFilename
-            // 
-            this.asymKeyFilename.AutoSize = true;
-            this.asymKeyFilename.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.asymKeyFilename.Location = new System.Drawing.Point(99, 50);
-            this.asymKeyFilename.Name = "asymKeyFilename";
-            this.asymKeyFilename.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.asymKeyFilename.Size = new System.Drawing.Size(72, 13);
-            this.asymKeyFilename.TabIndex = 11;
-            this.asymKeyFilename.Text = "No file loaded";
             // 
             // OKbtn
             // 
@@ -255,6 +256,7 @@
             this.Controls.Add(this.OKbtn);
             this.Controls.Add(this.groupSymmetric);
             this.Controls.Add(this.useSymmetric);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "decryptForm";
             this.Text = "decryptForm";
             this.Load += new System.EventHandler(this.decryptForm_Load);

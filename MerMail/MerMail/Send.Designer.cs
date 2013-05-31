@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Send));
             this.TB = new System.Windows.Forms.TextBox();
             this.BodyBox = new System.Windows.Forms.RichTextBox();
             this.Subjectbox = new System.Windows.Forms.TextBox();
@@ -123,6 +124,7 @@
             this.Controls.Add(this.Subjectbox);
             this.Controls.Add(this.BodyBox);
             this.Controls.Add(this.TB);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Send";
             this.Text = "Send";
             this.Load += new System.EventHandler(this.Send_Load);

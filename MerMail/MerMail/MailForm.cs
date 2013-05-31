@@ -64,6 +64,7 @@ namespace MerMail
                 mailBox.Items.Add(mail.subject);
             }
             toolStripStatusLabel1.Text = "Mails collected..";
+            mailBox.SetSelected(0, true);
 
         }
         private void workerDone(object sender, RunWorkerCompletedEventArgs e)
@@ -152,6 +153,11 @@ namespace MerMail
                 //decForm.private_key
                 //decForm.private
             }
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            (new About()).ShowDialog() ;
         }
 
     }

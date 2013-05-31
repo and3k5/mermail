@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(encryptForm));
             this.useSymmetric = new System.Windows.Forms.CheckBox();
             this.symmetricTextBox = new System.Windows.Forms.TextBox();
             this.symmetricAsymmetricEncrypted = new System.Windows.Forms.CheckBox();
@@ -309,6 +310,7 @@
             this.Controls.Add(this.OKbtn);
             this.Controls.Add(this.groupSymmetric);
             this.Controls.Add(this.useSymmetric);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "encryptForm";
             this.Text = "encryptForm";
             this.Load += new System.EventHandler(this.encryptForm_Load);

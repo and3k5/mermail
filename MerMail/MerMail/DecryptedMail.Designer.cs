@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DecryptedMail));
             this.label_subject = new System.Windows.Forms.Label();
             this.label_from = new System.Windows.Forms.Label();
             this.label_Hsubject = new System.Windows.Forms.Label();
@@ -102,6 +103,7 @@
             this.Controls.Add(this.label_Hsubject);
             this.Controls.Add(this.label_hFrom);
             this.Controls.Add(this.webBrowser1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "DecryptedMail";
             this.Text = "DecryptedMail";
             this.Load += new System.EventHandler(this.DecryptedMail_Load);
