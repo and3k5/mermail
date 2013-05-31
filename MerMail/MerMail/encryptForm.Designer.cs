@@ -35,6 +35,7 @@
             this.loadSymmetricFromFileBtn = new System.Windows.Forms.Button();
             this.symmetricTextRadio = new System.Windows.Forms.RadioButton();
             this.groupSymmetric = new System.Windows.Forms.GroupBox();
+            this.button2 = new System.Windows.Forms.Button();
             this.symKeyFilename = new System.Windows.Forms.Label();
             this.groupAsymmetric = new System.Windows.Forms.GroupBox();
             this.bytestrengthNum = new System.Windows.Forms.NumericUpDown();
@@ -48,7 +49,6 @@
             this.CANCELbtn = new System.Windows.Forms.Button();
             this.symmetricStatusLabel = new System.Windows.Forms.Label();
             this.asymmetricStatusLabel = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
             this.groupSymmetric.SuspendLayout();
             this.groupAsymmetric.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bytestrengthNum)).BeginInit();
@@ -80,9 +80,9 @@
             this.symmetricAsymmetricEncrypted.AutoSize = true;
             this.symmetricAsymmetricEncrypted.Location = new System.Drawing.Point(23, 173);
             this.symmetricAsymmetricEncrypted.Name = "symmetricAsymmetricEncrypted";
-            this.symmetricAsymmetricEncrypted.Size = new System.Drawing.Size(209, 17);
+            this.symmetricAsymmetricEncrypted.Size = new System.Drawing.Size(216, 17);
             this.symmetricAsymmetricEncrypted.TabIndex = 3;
-            this.symmetricAsymmetricEncrypted.Text = "Symmetric key is asymmetric encrypted";
+            this.symmetricAsymmetricEncrypted.Text = "Encrypt the Symmetric key, asymmetricly";
             this.symmetricAsymmetricEncrypted.UseVisualStyleBackColor = true;
             this.symmetricAsymmetricEncrypted.CheckedChanged += new System.EventHandler(this.symmetricAsymmetricEncrypted_CheckedChanged);
             // 
@@ -134,6 +134,16 @@
             this.groupSymmetric.TabIndex = 7;
             this.groupSymmetric.TabStop = false;
             this.groupSymmetric.Text = "Symmetric options";
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(242, 114);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(89, 28);
+            this.button2.TabIndex = 10;
+            this.button2.Text = "Experimental";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // symKeyFilename
             // 
@@ -257,7 +267,7 @@
             this.OKbtn.Name = "OKbtn";
             this.OKbtn.Size = new System.Drawing.Size(122, 28);
             this.OKbtn.TabIndex = 8;
-            this.OKbtn.Text = "Decrypt";
+            this.OKbtn.Text = "Save";
             this.OKbtn.UseVisualStyleBackColor = true;
             // 
             // CANCELbtn
@@ -287,16 +297,6 @@
             this.asymmetricStatusLabel.Size = new System.Drawing.Size(35, 13);
             this.asymmetricStatusLabel.TabIndex = 11;
             this.asymmetricStatusLabel.Text = "label1";
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(242, 114);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(89, 28);
-            this.button2.TabIndex = 10;
-            this.button2.Text = "Experimental";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // encryptForm
             // 

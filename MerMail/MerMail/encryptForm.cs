@@ -35,15 +35,22 @@ namespace MerMail
             {
                 if (symmetricTextRadio.Checked)
                 {
-                    if ((symmetricTextBox.TextLength == (128 / 8)) || (symmetricTextBox.TextLength == (192 / 8)))
+                    if (!symmetricAsymmetricEncrypted.Checked)
                     {
-                        symmetricTextBox.BackColor = Color.Green;
-                        SymmetricKey = symmetricTextBox.Text;
-                        validSymmetric = true;
+                        if ((symmetricTextBox.TextLength == (128 / 8)) || (symmetricTextBox.TextLength == (192 / 8)))
+                        {
+                            symmetricTextBox.BackColor = Color.Green;
+                            SymmetricKey = symmetricTextBox.Text;
+                            validSymmetric = true;
+                        }
+                        else
+                        {
+                            symmetricTextBox.BackColor = Color.Red;
+                        }
                     }
                     else
                     {
-                        symmetricTextBox.BackColor = Color.Red;
+                        symmetricTextBox.BackColor = Color.White;
                     }
                 }
             }

@@ -66,6 +66,7 @@ namespace MerMail
         public MerMail.Asymmetric.Key public_key = new MerMail.Asymmetric.Key();
         public string SymmetricKey = "";
 
+
         private void encSetBtn_Click(object sender, EventArgs e)
         {
             encryptForm encForm = new encryptForm();
