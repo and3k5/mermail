@@ -25,7 +25,7 @@ namespace MerMail
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             initMermailDB(); // Initialize SQLite database connections
-            Application.Run(new Form1());
+            Application.Run(new Mailform());
             sqlCon.Close(); // Closes the connection when program exits
         }
 

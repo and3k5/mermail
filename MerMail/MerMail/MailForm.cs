@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace MerMail
 {
-    public partial class Form1 : Form
+    public partial class Mailform : Form
     {
-        public Form1()
+        public Mailform()
         {
             InitializeComponent();
             // Worker from POP3 to SQLite

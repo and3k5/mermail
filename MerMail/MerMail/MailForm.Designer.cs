@@ -1,6 +1,6 @@
 ﻿namespace MerMail
 {
-    partial class Form1
+    partial class Mailform
     {
         /// <summary>
         /// Required designer variable.
@@ -53,26 +53,33 @@
             // 
             // mailBox
             // 
+            this.mailBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.mailBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(0)));
             this.mailBox.FormattingEnabled = true;
+            this.mailBox.ItemHeight = 16;
             this.mailBox.Location = new System.Drawing.Point(12, 27);
             this.mailBox.Name = "mailBox";
-            this.mailBox.Size = new System.Drawing.Size(124, 329);
+            this.mailBox.Size = new System.Drawing.Size(124, 468);
             this.mailBox.TabIndex = 5;
             this.mailBox.SelectedIndexChanged += new System.EventHandler(this.mailBox_SelectedIndexChanged);
             // 
             // webBrowser1
             // 
-            this.webBrowser1.Location = new System.Drawing.Point(169, 74);
+            this.webBrowser1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.webBrowser1.Location = new System.Drawing.Point(142, 76);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(414, 218);
+            this.webBrowser1.Size = new System.Drawing.Size(573, 416);
             this.webBrowser1.TabIndex = 7;
             this.webBrowser1.WebBrowserShortcutsEnabled = false;
             // 
             // label_hFrom
             // 
             this.label_hFrom.AutoSize = true;
-            this.label_hFrom.Location = new System.Drawing.Point(166, 27);
+            this.label_hFrom.Location = new System.Drawing.Point(142, 27);
             this.label_hFrom.Name = "label_hFrom";
             this.label_hFrom.Size = new System.Drawing.Size(33, 13);
             this.label_hFrom.TabIndex = 8;
@@ -81,7 +88,7 @@
             // label_Hsubject
             // 
             this.label_Hsubject.AutoSize = true;
-            this.label_Hsubject.Location = new System.Drawing.Point(166, 45);
+            this.label_Hsubject.Location = new System.Drawing.Point(142, 45);
             this.label_Hsubject.Name = "label_Hsubject";
             this.label_Hsubject.Size = new System.Drawing.Size(46, 13);
             this.label_Hsubject.TabIndex = 9;
@@ -90,7 +97,7 @@
             // label_from
             // 
             this.label_from.AutoSize = true;
-            this.label_from.Location = new System.Drawing.Point(226, 27);
+            this.label_from.Location = new System.Drawing.Point(181, 27);
             this.label_from.Name = "label_from";
             this.label_from.Size = new System.Drawing.Size(18, 13);
             this.label_from.TabIndex = 10;
@@ -99,7 +106,7 @@
             // label_subject
             // 
             this.label_subject.AutoSize = true;
-            this.label_subject.Location = new System.Drawing.Point(226, 45);
+            this.label_subject.Location = new System.Drawing.Point(194, 45);
             this.label_subject.Name = "label_subject";
             this.label_subject.Size = new System.Drawing.Size(18, 13);
             this.label_subject.TabIndex = 11;
@@ -113,7 +120,7 @@
             this.encryptionToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(684, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(727, 24);
             this.menuStrip1.TabIndex = 12;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -161,13 +168,13 @@
             this.decryptToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.currentMailToolStripMenuItem});
             this.decryptToolStripMenuItem.Name = "decryptToolStripMenuItem";
-            this.decryptToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.decryptToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
             this.decryptToolStripMenuItem.Text = "Decrypt";
             // 
             // currentMailToolStripMenuItem
             // 
             this.currentMailToolStripMenuItem.Name = "currentMailToolStripMenuItem";
-            this.currentMailToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.currentMailToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.currentMailToolStripMenuItem.Text = "Current Mail";
             this.currentMailToolStripMenuItem.Click += new System.EventHandler(this.currentMailToolStripMenuItem_Click);
             // 
@@ -176,7 +183,7 @@
             this.encryptToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newMailToolStripMenuItem});
             this.encryptToolStripMenuItem.Name = "encryptToolStripMenuItem";
-            this.encryptToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.encryptToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
             this.encryptToolStripMenuItem.Text = "Encrypt";
             // 
             // newMailToolStripMenuItem
@@ -190,9 +197,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripProgressBar1,
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 508);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 501);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(684, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(727, 22);
             this.statusStrip1.TabIndex = 13;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -209,11 +216,11 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
             this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
             // 
-            // Form1
+            // Mailform
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(684, 530);
+            this.ClientSize = new System.Drawing.Size(727, 523);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.label_subject);
             this.Controls.Add(this.label_from);
@@ -223,8 +230,9 @@
             this.Controls.Add(this.mailBox);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.MinimumSize = new System.Drawing.Size(600, 500);
+            this.Name = "Mailform";
+            this.Text = "Mer Mail";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

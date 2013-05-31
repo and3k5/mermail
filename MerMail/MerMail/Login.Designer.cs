@@ -62,14 +62,14 @@
             this.PassBox.Name = "PassBox";
             this.PassBox.PasswordChar = '*';
             this.PassBox.Size = new System.Drawing.Size(101, 20);
-            this.PassBox.TabIndex = 9;
+            this.PassBox.TabIndex = 8;
             // 
             // UserBox
             // 
             this.UserBox.Location = new System.Drawing.Point(106, 133);
             this.UserBox.Name = "UserBox";
             this.UserBox.Size = new System.Drawing.Size(101, 20);
-            this.UserBox.TabIndex = 8;
+            this.UserBox.TabIndex = 7;
             // 
             // useSslCheckbox
             // 
@@ -77,7 +77,7 @@
             this.useSslCheckbox.Location = new System.Drawing.Point(137, 110);
             this.useSslCheckbox.Name = "useSslCheckbox";
             this.useSslCheckbox.Size = new System.Drawing.Size(62, 17);
-            this.useSslCheckbox.TabIndex = 13;
+            this.useSslCheckbox.TabIndex = 6;
             this.useSslCheckbox.Text = "Pop Ssl";
             this.useSslCheckbox.UseVisualStyleBackColor = true;
             // 
@@ -86,14 +86,14 @@
             this.PortBox.Location = new System.Drawing.Point(106, 32);
             this.PortBox.Name = "PortBox";
             this.PortBox.Size = new System.Drawing.Size(103, 20);
-            this.PortBox.TabIndex = 12;
+            this.PortBox.TabIndex = 2;
             // 
             // HostNameBox
             // 
             this.HostNameBox.Location = new System.Drawing.Point(106, 6);
             this.HostNameBox.Name = "HostNameBox";
             this.HostNameBox.Size = new System.Drawing.Size(103, 20);
-            this.HostNameBox.TabIndex = 11;
+            this.HostNameBox.TabIndex = 1;
             // 
             // label1
             // 
@@ -137,7 +137,7 @@
             this.comboBox1.Location = new System.Drawing.Point(19, 185);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(188, 21);
-            this.comboBox1.TabIndex = 19;
+            this.comboBox1.TabIndex = 9;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // SmtpName
@@ -145,14 +145,14 @@
             this.SmtpName.Location = new System.Drawing.Point(106, 58);
             this.SmtpName.Name = "SmtpName";
             this.SmtpName.Size = new System.Drawing.Size(103, 20);
-            this.SmtpName.TabIndex = 20;
+            this.SmtpName.TabIndex = 3;
             // 
             // SmtpPort
             // 
             this.SmtpPort.Location = new System.Drawing.Point(106, 84);
             this.SmtpPort.Name = "SmtpPort";
             this.SmtpPort.Size = new System.Drawing.Size(103, 20);
-            this.SmtpPort.TabIndex = 21;
+            this.SmtpPort.TabIndex = 4;
             // 
             // label3
             // 
@@ -178,7 +178,7 @@
             this.usesmtpssl.Location = new System.Drawing.Point(64, 110);
             this.usesmtpssl.Name = "usesmtpssl";
             this.usesmtpssl.Size = new System.Drawing.Size(67, 17);
-            this.usesmtpssl.TabIndex = 24;
+            this.usesmtpssl.TabIndex = 5;
             this.usesmtpssl.Text = "Smtp Ssl";
             this.usesmtpssl.UseVisualStyleBackColor = true;
             // 
