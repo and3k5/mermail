@@ -18,7 +18,7 @@ namespace MerMail
         }
         private void About_Load(object sender, EventArgs e)
         {
-            
+            versionLabel.Text = "Version: "+System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
         private void pictureBox1_Click(object sender, EventArgs e)
         {
