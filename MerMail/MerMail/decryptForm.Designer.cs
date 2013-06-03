@@ -256,6 +256,7 @@
             this.Controls.Add(this.OKbtn);
             this.Controls.Add(this.groupSymmetric);
             this.Controls.Add(this.useSymmetric);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "decryptForm";
             this.Text = "decryptForm";

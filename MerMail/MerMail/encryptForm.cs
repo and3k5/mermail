@@ -22,6 +22,7 @@ namespace MerMail
         public bool validSymmetric = false;
         public bool validAsymmetric = false;
         public string SymmetricKey = null;
+        public bool SymmetricKeySaved = false;
         public Asymmetric.Key public_key;
 
         private void updateControls()
@@ -157,8 +158,8 @@ namespace MerMail
 
         private void asymmetricTextBox_TextChanged(object sender, EventArgs e)
         {
-            asymmetricTextRadio.Checked = true;
-            updateControls();
+            //asymmetricTextRadio.Checked = true;
+            //updateControls();
         }
 
         private void symmetricTextBox_Enter(object sender, EventArgs e)
@@ -169,8 +170,8 @@ namespace MerMail
 
         private void asymmetricTextBox_Enter(object sender, EventArgs e)
         {
-            asymmetricTextRadio.Checked = true;
-            updateControls();
+            //asymmetricTextRadio.Checked = true;
+            //updateControls();
         }
 
         private void button1_Click_1(object sender, EventArgs e)
@@ -206,6 +207,26 @@ namespace MerMail
             symmetricTextRadio.Checked = true;
             symmetricTextBox.Text = MerMail.Symmetric.generateKey();
             useSymmetric.Checked = true;
+            updateControls();
+        }
+
+        private void OKbtn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void asymmetricTextRadio_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            symmetricFileRadio.Checked = true;
+            SymmetricKey = MerMail.Symmetric.generateKey();
+            validSymmetric = true;
+            MerMail.Program.saveFile("symmetric_raw.txt", "Save generated symmetric key (raw)", "Any (*.*)", "*.*", SymmetricKey);
+            symKeyFilename.Text = "File generated (in memory)";
             updateControls();
         }
     }
