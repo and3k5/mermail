@@ -124,6 +124,7 @@
             this.Controls.Add(this.Subjectbox);
             this.Controls.Add(this.BodyBox);
             this.Controls.Add(this.TB);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Send";
             this.Text = "Send";
